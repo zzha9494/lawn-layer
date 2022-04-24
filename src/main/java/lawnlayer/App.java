@@ -60,7 +60,7 @@ public class App extends PApplet {
         this.ball = loadImage(this.getClass().getResource("ball.png").getPath());
 
         // create cement tiles
-        _create_cement(_read_map("level1.txt"), this.cement_tiles, this.concrete);
+        _create_cement(_read_map("level1.txt"), this);
 
         // Initialise characters
         this.player = new Player(0, TOPBAR, this.ball);
@@ -107,11 +107,11 @@ public class App extends PApplet {
             this.player.moveDown = false;
     }
 
-    public static void _create_cement(boolean[][] grid, ArrayList<Cement> cement_tiles, PImage concrete) {
+    public static void _create_cement(boolean[][] grid, App app) {
         for (int row = 0; row < grid.length; row++)
             for (int column = 0; column < grid[row].length; column++) {
                 if (grid[row][column])
-                    cement_tiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, concrete));
+                    app.cement_tiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, app.concrete));
             }
     }
 
@@ -150,7 +150,6 @@ public class App extends PApplet {
         }
         return true;
     }
-
 
     public static void main(String[] args) {
         PApplet.main("lawnlayer.App");
