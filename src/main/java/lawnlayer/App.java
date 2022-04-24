@@ -109,6 +109,7 @@ public class App extends PApplet {
 
     public static ArrayList<Cement> createCement(App app) {
         ArrayList<Cement> cementTiles = new ArrayList<Cement>();
+
         JSONArray levels = app.loadJSONObject(app.configPath).getJSONArray("levels");
         boolean[][] grid = readMap(levels.getJSONObject(app.currentLevel++).getString("outlay"));
 
