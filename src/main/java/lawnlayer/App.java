@@ -3,6 +3,8 @@ package lawnlayer;
 import org.checkerframework.checker.units.qual.A;
 import processing.core.PApplet;
 import processing.core.PImage;
+
+import java.util.ArrayList;
 //import processing.data.JSONObject;
 //import processing.data.JSONArray;
 //import processing.core.PFont;
@@ -22,6 +24,11 @@ public class App extends PApplet {
     public PImage concrete;
     public PImage worm;
     public PImage beetle;
+    public PImage ball;
+
+    public ArrayList<Cement> cement_tiles;
+
+    public Player player;
 
     public App() {
         this.configPath = "config.json";
@@ -45,6 +52,10 @@ public class App extends PApplet {
         this.concrete = loadImage(this.getClass().getResource("concrete_tile.png").getPath());
         this.worm = loadImage(this.getClass().getResource("worm.png").getPath());
         this.beetle = loadImage(this.getClass().getResource("beetle.png").getPath());
+        this.ball = loadImage(this.getClass().getResource("ball.png").getPath());
+
+        // Initialise characters
+        this.player = new Player(0, TOPBAR, this.ball);
         
 
     }
@@ -53,7 +64,36 @@ public class App extends PApplet {
      * Draw all elements in the game by current frame. 
     */
     public void draw() {
+        background(244, 164, 96); // Sandy Brown
 
+        //tick
+        this.player.tick();
+
+        // draw
+        this.player.draw(this);
+
+    }
+
+    public void keyPressed() {
+        if (this.keyCode == 37)
+            this.player.moveLeft = true;
+        if (this.keyCode == 38)
+            this.player.moveUp = true;
+        if (this.keyCode == 39)
+            this.player.moveRight = true;
+        if (this.keyCode == 40)
+            this.player.moveDown = true;
+    }
+
+    public void keyReleased() {
+        if (this.keyCode == 37)
+            this.player.moveLeft = false;
+        if (this.keyCode == 38)
+            this.player.moveUp = false;
+        if (this.keyCode == 39)
+            this.player.moveRight = false;
+        if (this.keyCode == 40)
+            this.player.moveDown = false;
     }
 
 
