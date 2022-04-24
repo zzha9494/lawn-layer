@@ -7,9 +7,14 @@ public class Player extends Character {
     public boolean moveUp;
     public boolean moveRight;
     public boolean moveDown;
+    public int lives;
 
     public Player(int x, int y, PImage sprite) {
         super(x, y, sprite);
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     public void tick() {

@@ -25,13 +25,15 @@ public class App extends PApplet {
     public PImage beetle;
     public PImage ball;
 
+    public int currentLevel;
+    public int maxLevel;
+
     public ArrayList<Cement> cementTiles;
 
     public Player player;
 
     public App() {
         this.configPath = "config.json";
-        this.cementTiles = new ArrayList<Cement>();
     }
 
     /**
@@ -54,11 +56,14 @@ public class App extends PApplet {
         this.beetle = loadImage(this.getClass().getResource("beetle.png").getPath());
         this.ball = loadImage(this.getClass().getResource("ball.png").getPath());
 
+        this.currentLevel = 0;
+        this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
+
         // create cement tiles
-        createCement(readMap("level1.txt"), this);
+        this.cementTiles = createCement(this, readMap("level1.txt"));
 
         // Initialise characters
-        this.player = new Player(0, TOPBAR, this.ball);
+        this.player = createPlayer(this);
     }
 	
     /**
@@ -100,15 +105,18 @@ public class App extends PApplet {
             this.player.moveDown = false;
     }
 
-    public static void createCement(boolean[][] grid, App app) {
+    public static ArrayList<Cement> createCement(App app, boolean[][] grid) {
+        ArrayList<Cement> cementTiles = new ArrayList<Cement>();
+
         if (grid == null)
-            return;
+            return cementTiles;
 
         for (int row = 0; row < grid.length; row++)
             for (int column = 0; column < grid[row].length; column++) {
                 if (grid[row][column])
-                    app.cementTiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, app.concrete));
+                    cementTiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, app.concrete));
             }
+        return cementTiles;
     }
 
     public static boolean[][] readMap(String path) {
@@ -145,6 +153,13 @@ public class App extends PApplet {
                 return false;
         }
         return true;
+    }
+
+    public static Player createPlayer(App app) {
+        Player player = new Player(0, TOPBAR, app.ball);
+        int lives = app.loadJSONObject(app.configPath).getInt("lives");
+        player.setLives(lives);
+        return player;
     }
 
     public static void main(String[] args) {
