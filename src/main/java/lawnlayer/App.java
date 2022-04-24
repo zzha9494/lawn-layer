@@ -1,10 +1,14 @@
 package lawnlayer;
 
 import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.C;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 //import processing.data.JSONObject;
 //import processing.data.JSONArray;
 //import processing.core.PFont;
@@ -32,6 +36,7 @@ public class App extends PApplet {
 
     public App() {
         this.configPath = "config.json";
+        this.cement_tiles = new ArrayList<Cement>();
     }
 
     /**
@@ -54,6 +59,9 @@ public class App extends PApplet {
         this.beetle = loadImage(this.getClass().getResource("beetle.png").getPath());
         this.ball = loadImage(this.getClass().getResource("ball.png").getPath());
 
+        // create cement tiles
+        _create_cement(_read_map("level1.txt"), this.cement_tiles, this.concrete);
+
         // Initialise characters
         this.player = new Player(0, TOPBAR, this.ball);
         
@@ -70,6 +78,9 @@ public class App extends PApplet {
         this.player.tick();
 
         // draw
+        for (Cement cement: this.cement_tiles)
+            cement.draw(this);
+
         this.player.draw(this);
 
     }
@@ -94,6 +105,50 @@ public class App extends PApplet {
             this.player.moveRight = false;
         if (this.keyCode == 40)
             this.player.moveDown = false;
+    }
+
+    public static boolean[][] _read_map(String path) {
+        File f = new File(path);
+        Scanner scan = null;
+        boolean[][] grid = new boolean[32][64];
+        int row = -1;
+
+        try {
+            scan = new Scanner(f);
+        }catch (FileNotFoundException e) {
+            return null;
+        }
+
+        while (scan.hasNextLine() && row < 32) {
+            String line = scan.nextLine();
+            row ++;
+            for (int column = 0; column < line.length(); column++) {
+                if (line.charAt(column) == 'X')
+                    grid[row][column] = true;
+            }
+        }
+        return grid;
+    }
+
+    public static void _create_cement(boolean[][] grid, ArrayList<Cement> cement_tiles, PImage concrete) {
+        for (int row = 0; row < grid.length; row++)
+            for (int column = 0; column < grid[row].length; column++) {
+                if (grid[row][column])
+                    cement_tiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, concrete));
+            }
+    }
+
+    public static boolean _check_map_valid(boolean[][] grid) {
+        for (int i = 0; i < 64; i++) {
+            if (!grid[0][i] || !grid[31][i])
+                return false;
+        }
+
+        for (int i = 0; i < 32; i++) {
+            if (!grid[i][0] || !grid[i][63])
+                return false;
+        }
+        return true;
     }
 
 

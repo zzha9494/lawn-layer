@@ -7,7 +7,7 @@ public class Tile {
 
     protected int x;
     protected int y;
-    private PImage sprite;
+    protected PImage sprite;
 
     public Tile(int x, int y) {
         this.x = x;
