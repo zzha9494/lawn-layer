@@ -113,7 +113,7 @@ public class App extends PApplet {
 
     public static boolean[][] readMap(String path) {
         File f = new File(path);
-        Scanner scan = null;
+        Scanner scan;
         boolean[][] grid = new boolean[32][64];
         int row = -1;
 
