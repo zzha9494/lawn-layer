@@ -107,6 +107,14 @@ public class App extends PApplet {
             this.player.moveDown = false;
     }
 
+    public static void _create_cement(boolean[][] grid, ArrayList<Cement> cement_tiles, PImage concrete) {
+        for (int row = 0; row < grid.length; row++)
+            for (int column = 0; column < grid[row].length; column++) {
+                if (grid[row][column])
+                    cement_tiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, concrete));
+            }
+    }
+
     public static boolean[][] _read_map(String path) {
         File f = new File(path);
         Scanner scan = null;
@@ -128,14 +136,6 @@ public class App extends PApplet {
             }
         }
         return grid;
-    }
-
-    public static void _create_cement(boolean[][] grid, ArrayList<Cement> cement_tiles, PImage concrete) {
-        for (int row = 0; row < grid.length; row++)
-            for (int column = 0; column < grid[row].length; column++) {
-                if (grid[row][column])
-                    cement_tiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, concrete));
-            }
     }
 
     public static boolean _check_map_valid(boolean[][] grid) {
