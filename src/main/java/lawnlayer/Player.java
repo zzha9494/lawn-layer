@@ -14,14 +14,14 @@ public class Player extends Character {
 
     public void tick() {
         if (moveLeft || moveRight) {
-            if (moveLeft)
+            if (moveLeft && this.x > 0)
                 this.x -= 2;
-            if (moveRight)
+            if (moveRight && this.x < 1260)
                 this.x += 2;
         } else if (moveUp || moveDown) {
-            if (moveUp)
+            if (moveUp && this.y > 80)
                 this.y -= 2;
-            if (moveDown)
+            if (moveDown && this.y < 700)
                 this.y += 2;
         }
     }
