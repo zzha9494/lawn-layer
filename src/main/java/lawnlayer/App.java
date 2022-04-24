@@ -2,6 +2,8 @@ package lawnlayer;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,7 +62,7 @@ public class App extends PApplet {
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
 
         // create cement tiles
-        this.cementTiles = createCement(this, readMap("level1.txt"));
+        this.cementTiles = createCement(this);
 
         // Initialise characters
         this.player = createPlayer(this);
@@ -105,8 +107,10 @@ public class App extends PApplet {
             this.player.moveDown = false;
     }
 
-    public static ArrayList<Cement> createCement(App app, boolean[][] grid) {
+    public static ArrayList<Cement> createCement(App app) {
         ArrayList<Cement> cementTiles = new ArrayList<Cement>();
+        JSONArray levels = app.loadJSONObject(app.configPath).getJSONArray("levels");
+        boolean[][] grid = readMap(levels.getJSONObject(app.currentLevel++).getString("outlay"));
 
         if (grid == null)
             return cementTiles;
