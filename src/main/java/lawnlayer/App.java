@@ -1,7 +1,5 @@
 package lawnlayer;
 
-import org.checkerframework.checker.units.qual.A;
-import org.checkerframework.checker.units.qual.C;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -9,9 +7,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-//import processing.data.JSONObject;
-//import processing.data.JSONArray;
-//import processing.core.PFont;
 
 public class App extends PApplet {
 
@@ -30,13 +25,13 @@ public class App extends PApplet {
     public PImage beetle;
     public PImage ball;
 
-    public ArrayList<Cement> cement_tiles;
+    public ArrayList<Cement> cementTiles;
 
     public Player player;
 
     public App() {
         this.configPath = "config.json";
-        this.cement_tiles = new ArrayList<Cement>();
+        this.cementTiles = new ArrayList<Cement>();
     }
 
     /**
@@ -60,12 +55,10 @@ public class App extends PApplet {
         this.ball = loadImage(this.getClass().getResource("ball.png").getPath());
 
         // create cement tiles
-        _create_cement(_read_map("level1.txt"), this);
+        createCement(readMap("level1.txt"), this);
 
         // Initialise characters
         this.player = new Player(0, TOPBAR, this.ball);
-        
-
     }
 	
     /**
@@ -78,7 +71,7 @@ public class App extends PApplet {
         this.player.tick();
 
         // draw
-        for (Cement cement: this.cement_tiles)
+        for (Cement cement: this.cementTiles)
             cement.draw(this);
 
         this.player.draw(this);
@@ -107,15 +100,18 @@ public class App extends PApplet {
             this.player.moveDown = false;
     }
 
-    public static void _create_cement(boolean[][] grid, App app) {
+    public static void createCement(boolean[][] grid, App app) {
+        if (grid == null)
+            return;
+
         for (int row = 0; row < grid.length; row++)
             for (int column = 0; column < grid[row].length; column++) {
                 if (grid[row][column])
-                    app.cement_tiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, app.concrete));
+                    app.cementTiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, app.concrete));
             }
     }
 
-    public static boolean[][] _read_map(String path) {
+    public static boolean[][] readMap(String path) {
         File f = new File(path);
         Scanner scan = null;
         boolean[][] grid = new boolean[32][64];
@@ -138,7 +134,7 @@ public class App extends PApplet {
         return grid;
     }
 
-    public static boolean _check_map_valid(boolean[][] grid) {
+    public static boolean checkMapValid(boolean[][] grid) {
         for (int i = 0; i < 64; i++) {
             if (!grid[0][i] || !grid[31][i])
                 return false;
