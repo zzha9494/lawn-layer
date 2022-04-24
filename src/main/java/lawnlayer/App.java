@@ -112,8 +112,7 @@ public class App extends PApplet {
         JSONArray levels = app.loadJSONObject(app.configPath).getJSONArray("levels");
         boolean[][] grid = readMap(levels.getJSONObject(app.currentLevel++).getString("outlay"));
 
-        if (grid == null)
-            return cementTiles;
+        checkMapValid(grid);
 
         for (int row = 0; row < grid.length; row++)
             for (int column = 0; column < grid[row].length; column++) {
@@ -146,15 +145,18 @@ public class App extends PApplet {
         return grid;
     }
 
-    public static boolean checkMapValid(boolean[][] grid) {
+    public static boolean checkMapValid(boolean[][] grid) throws Error{
+        if (grid == null)
+            throw new Error("Invalid Map.");
+
         for (int i = 0; i < 64; i++) {
             if (!grid[0][i] || !grid[31][i])
-                return false;
+                throw new Error("Invalid Map.");
         }
 
         for (int i = 0; i < 32; i++) {
             if (!grid[i][0] || !grid[i][63])
-                return false;
+                throw new Error("Invalid Map.");
         }
         return true;
     }
