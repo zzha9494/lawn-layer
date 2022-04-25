@@ -82,8 +82,10 @@ public class App extends PApplet {
         //tick
         this.player.tick();
 
-        for (Enemy enemy: this.enemies)
+        for (Enemy enemy: this.enemies) {
+            enemy.changeDiagonal(this);
             enemy.tick();
+        }
 
         // draw
         for (Cement cement: this.cementTiles)
@@ -93,6 +95,11 @@ public class App extends PApplet {
 
         for (Enemy enemy: this.enemies)
             enemy.draw(this);
+
+        // test
+//        for (Cement cement: this.cementTiles)
+//            if (this.player.checkCling(cement))
+//                System.out.println("yes");
 
     }
 

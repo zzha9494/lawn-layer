@@ -31,9 +31,43 @@ public class Enemy extends Character{
         return null;
     }
 
-//    public void setSprite(PImage sprite) {
-//        this.sprite = sprite;
-//    }
+    public Cement clingCement (App app) {
+        for (Cement cement: app.cementTiles) {
+            if (this.checkCling(cement))
+                return cement;
+        }
+        return null;
+    }
+
+    public void changeDiagonal(App app) {
+        Tile clingWhat = this.clingCement(app);
+        if (clingWhat == null)
+            return;
+
+        if (this.x == clingWhat.x && this.y == clingWhat.y + 20)
+            if (this.diagonal == Direction.TopRight)
+                this.diagonal = Direction.BottomRight;
+            else
+                this.diagonal = Direction.BottomLeft;
+
+        if (this.x == clingWhat.x && this.y + 20 == clingWhat.y)
+            if (this.diagonal == Direction.BottomRight)
+                this.diagonal = Direction.TopRight;
+            else
+                this.diagonal = Direction.TopLeft;
+
+        if (this.x == clingWhat.x + 20 && this.y == clingWhat.y)
+            if (this.diagonal == Direction.TopLeft)
+                this.diagonal = Direction.TopRight;
+            else
+                this.diagonal = Direction.BottomRight;
+
+        if (this.x + 20 == clingWhat.x && this.y == clingWhat.y)
+            if (this.diagonal == Direction.TopRight)
+                this.diagonal = Direction.TopLeft;
+            else
+                this.diagonal = Direction.BottomLeft;
+    }
 
     public void tick() {
         if (this.diagonal == Direction.TopLeft) {
