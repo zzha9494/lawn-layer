@@ -6,7 +6,7 @@ import processing.core.PImage;
 public abstract class Character {
     protected int x;
     protected int y;
-    protected final PImage sprite;
+    protected PImage sprite;
 
     public Character(int x, int y, PImage sprite) {
         this.x = x;
