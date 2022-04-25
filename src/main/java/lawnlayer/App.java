@@ -80,6 +80,7 @@ public class App extends PApplet {
         background(244, 164, 96); // Sandy Brown
 
         //tick
+        this.player.checkOnCement(this);
         this.player.tick();
 
         for (Enemy enemy: this.enemies) {
@@ -97,9 +98,11 @@ public class App extends PApplet {
             enemy.draw(this);
 
         // test
+//        System.out.println(this.enemies.get(0).x + ", "+ this.enemies.get(0).y);
 //        for (Cement cement: this.cementTiles)
 //            if (this.player.checkCling(cement))
 //                System.out.println("yes");
+//        System.out.println(this.player.onCement);
 
     }
 

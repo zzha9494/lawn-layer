@@ -24,13 +24,6 @@ public class Enemy extends Character{
         }
     }
 
-    public Cement collideCement (App app) {
-        for (Cement cement: app.cementTiles)
-            if (this.checkCollide(cement))
-                return cement;
-        return null;
-    }
-
     public Cement clingCement (App app) {
         for (Cement cement: app.cementTiles) {
             if (this.checkCling(cement))

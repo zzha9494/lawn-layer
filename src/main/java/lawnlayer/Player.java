@@ -4,6 +4,7 @@ import processing.core.PImage;
 
 public class Player extends Character {
     public Direction slideDirection;
+    public boolean onCement;
     public boolean leftMoving;
     public boolean rightMoving;
     public boolean upMoving;
@@ -59,6 +60,10 @@ public class Player extends Character {
             }
             this.y -= 2;
         }
+    }
+
+    public void checkOnCement(App app) {
+        this.onCement = this.collideCement(app) != null;
     }
 
     public void keyPressedMoving() {

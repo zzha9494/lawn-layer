@@ -40,6 +40,13 @@ public abstract class Character {
         return this.y == t.y && (this.x == t.x + 20 || this.x + 20 == t.x);
     }
 
+    public Cement collideCement (App app) {
+        for (Cement cement: app.cementTiles)
+            if (this.checkCollide(cement))
+                return cement;
+        return null;
+    }
+
     public abstract void tick();
 
     public void draw(PApplet app) {
