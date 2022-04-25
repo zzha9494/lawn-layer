@@ -2,14 +2,6 @@ package lawnlayer;
 
 import processing.core.PImage;
 
-enum Direction {
-    Stop,
-    Up,
-    Down,
-    Left,
-    Right
-}
-
 public class Player extends Character {
     public Direction slideDirection;
     public boolean leftMoving;

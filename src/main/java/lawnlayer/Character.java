@@ -3,6 +3,18 @@ package lawnlayer;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+enum Direction {
+    Stop,
+    Up,
+    Down,
+    Left,
+    Right,
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight
+}
+
 public abstract class Character {
     protected int x;
     protected int y;

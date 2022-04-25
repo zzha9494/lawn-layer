@@ -82,6 +82,9 @@ public class App extends PApplet {
         //tick
         this.player.tick();
 
+        for (Enemy enemy: this.enemies)
+            enemy.tick();
+
         // draw
         for (Cement cement: this.cementTiles)
             cement.draw(this);
