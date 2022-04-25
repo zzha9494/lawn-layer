@@ -86,10 +86,10 @@ public class App extends PApplet {
         for (Cement cement: this.cementTiles)
             cement.draw(this);
 
+        this.player.draw(this);
+
         for (Enemy enemy: this.enemies)
             enemy.draw(this);
-
-        this.player.draw(this);
 
     }
 
@@ -143,35 +143,6 @@ public class App extends PApplet {
         return cementTiles;
     }
 
-    public static ArrayList<Enemy> createEnemies(App app) {
-        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-
-        JSONArray levels = app.loadJSONObject(app.configPath).getJSONArray("levels");
-        JSONArray enemiesConfig = levels.getJSONObject(app.currentLevel).getJSONArray("enemies");
-        int enemiesCount = enemiesConfig.size();
-
-        for (int i = 0; i < enemiesCount; i++) {
-            JSONObject currentEnemy = enemiesConfig.getJSONObject(i);
-            Enemy enemy = new Enemy(0, 0, null);
-
-            if (currentEnemy.getInt("type") == 0)
-                enemy.sprite = app.worm;
-            else if(currentEnemy.getInt("type") == 1)
-                enemy.sprite = app.beetle;
-
-            if (currentEnemy.getString("spawn").equals("random"))
-                enemy.randomSpawn(app);
-            else {
-                enemy.x = 20 + 20 * i;
-                enemy.y = 100 + 20 * i;
-            }
-
-            enemies.add(enemy);
-        }
-
-        return enemies;
-    }
-
     public static boolean[][] readMap(String path) {
         File f = new File(path);
         Scanner scan;
@@ -216,6 +187,35 @@ public class App extends PApplet {
         int lives = app.loadJSONObject(app.configPath).getInt("lives");
         player.setLives(lives);
         return player;
+    }
+
+    public static ArrayList<Enemy> createEnemies(App app) {
+        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+
+        JSONArray levels = app.loadJSONObject(app.configPath).getJSONArray("levels");
+        JSONArray enemiesConfig = levels.getJSONObject(app.currentLevel).getJSONArray("enemies");
+        int enemiesCount = enemiesConfig.size();
+
+        for (int i = 0; i < enemiesCount; i++) {
+            JSONObject currentEnemy = enemiesConfig.getJSONObject(i);
+            Enemy enemy = new Enemy(0, 0, null);
+
+            if (currentEnemy.getInt("type") == 0)
+                enemy.sprite = app.worm;
+            else if(currentEnemy.getInt("type") == 1)
+                enemy.sprite = app.beetle;
+
+            if (currentEnemy.getString("spawn").equals("random"))
+                enemy.randomSpawn(app);
+            else {
+                enemy.x = 20 + 20 * i;
+                enemy.y = 100 + 20 * i;
+            }
+
+            enemies.add(enemy);
+        }
+
+        return enemies;
     }
 
     public static void main(String[] args) {
