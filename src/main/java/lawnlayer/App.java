@@ -3,7 +3,6 @@ package lawnlayer;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.JSONArray;
-import processing.data.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -86,25 +85,37 @@ public class App extends PApplet {
     }
 
     public void keyPressed() {
-        if (this.keyCode == 37)
-            this.player.moveLeft = true;
+        if (this.keyCode == 37 )
+            this.player.leftMoving = true;
         if (this.keyCode == 38)
-            this.player.moveUp = true;
+            this.player.upMoving = true;
         if (this.keyCode == 39)
-            this.player.moveRight = true;
+            this.player.rightMoving = true;
         if (this.keyCode == 40)
-            this.player.moveDown = true;
+            this.player.downMoving = true;
     }
 
     public void keyReleased() {
-        if (this.keyCode == 37)
-            this.player.moveLeft = false;
-        if (this.keyCode == 38)
-            this.player.moveUp = false;
-        if (this.keyCode == 39)
-            this.player.moveRight = false;
-        if (this.keyCode == 40)
-            this.player.moveDown = false;
+        if (this.keyCode == 37) {
+            this.player.leftMoving = false;
+            if (this.player.x % SPRITESIZE != 0)
+                this.player.slideDirection = Direction.Left;
+        }
+        if (this.keyCode == 38) {
+            this.player.upMoving = false;
+            if (this.player.y % SPRITESIZE != 0)
+                this.player.slideDirection = Direction.Up;
+        }
+        if (this.keyCode == 39) {
+            this.player.rightMoving = false;
+            if (this.player.x % SPRITESIZE != 0)
+                this.player.slideDirection = Direction.Right;
+        }
+        if (this.keyCode == 40) {
+            this.player.downMoving = false;
+            if (this.player.y % SPRITESIZE != 0)
+                this.player.slideDirection = Direction.Down;
+        }
     }
 
     public static ArrayList<Cement> createCement(App app) {
