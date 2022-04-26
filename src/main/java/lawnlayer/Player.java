@@ -3,7 +3,10 @@ package lawnlayer;
 import processing.core.PImage;
 
 public class Player extends Character {
-    public Direction slideDirection;
+    public Direction leftRightDirection;
+    public Direction upDownDirection;
+    public Direction soilSlideDirection;
+    public boolean turnHead;
     public boolean onCement;
     public boolean leftMoving;
     public boolean rightMoving;
@@ -14,7 +17,8 @@ public class Player extends Character {
 
     public Player(int x, int y, PImage sprite) {
         super(x, y, sprite);
-        this.slideDirection = Direction.Stop;
+        this.leftRightDirection = Direction.Stop;
+        this.upDownDirection = Direction.Stop;
     }
 
     public void setLives(int lives) {
@@ -22,51 +26,57 @@ public class Player extends Character {
     }
 
     public void tick() {
-        if (this.slideDirection != Direction.Stop)
-            this.slideSnapGrid();
-        else
-            this.keyPressedMoving();
+//        if (this.slideDirection != Direction.Stop)
+                this.slideSnapGrid();
+//        else {
+////            if (this.onCement)
+//                this.cementMoving();
+////            else
+////                this.soilMoving();
+//        }
     }
 
     public void slideSnapGrid() {
-        if(this.slideDirection == Direction.Left) {
-            if (this.x % 20 ==0) {
-                this.slideDirection = Direction.Stop;
-                return;
-            }
+
+        if(this.leftRightDirection == Direction.Left && this.y % 20 ==0) {
             this.x -= 2;
+            if (this.x % 20 ==0 && !this.leftMoving)
+                this.leftRightDirection = Direction.Stop;
         }
 
-        if(this.slideDirection == Direction.Right) {
-            if (this.x % 20 ==0) {
-                this.slideDirection = Direction.Stop;
-                return;
-            }
+        if(this.leftRightDirection == Direction.Right  && this.y % 20 ==0) {
             this.x += 2;
+            if (this.x % 20 ==0 && !this.rightMoving)
+                this.leftRightDirection = Direction.Stop;
         }
 
-        if(this.slideDirection == Direction.Down) {
-            if (this.y % 20 ==0) {
-                this.slideDirection = Direction.Stop;
-                return;
-            }
-            this.y += 2;
-        }
-
-        if(this.slideDirection == Direction.Up) {
-            if (this.y % 20 ==0) {
-                this.slideDirection = Direction.Stop;
-                return;
-            }
+        if(this.upDownDirection == Direction.Up && this.x % 20 ==0) {
             this.y -= 2;
+            if (this.y % 20 ==0 && !this.upMoving)
+                this.upDownDirection = Direction.Stop;
         }
+
+        if(this.upDownDirection == Direction.Down && this.x % 20 ==0) {
+            this.y += 2;
+            if (this.y % 20 ==0 && !this.downMoving) {
+                this.upDownDirection = Direction.Stop;
+            }
+        }
+
     }
 
-    public void checkOnCement(App app) {
-        this.onCement = this.collideCement(app) != null;
+    public void soilMoving() {
+        if (this.soilSlideDirection == Direction.Left)
+            this.x -= 2;
+        if (this.soilSlideDirection == Direction.Right)
+            this.x += 2;
+        if (this.soilSlideDirection == Direction.Up)
+            this.y -= 2;
+        if (this.soilSlideDirection == Direction.Down)
+            this.y += 2;
     }
 
-    public void keyPressedMoving() {
+    public void cementMoving() {
         if (this.leftMoving || this.rightMoving) {
             if (this.leftMoving  && this.x > 0)
                 this.x -= 2;
@@ -78,6 +88,15 @@ public class Player extends Character {
             if (this.downMoving  && this.y < 700)
                 this.y += 2;
         }
+    }
+
+    public void checkOnCement(App app) {
+        if (this.collideCement(app) != null) {
+            this.onCement = true;
+            this.soilSlideDirection = Direction.Stop;
+        }
+        else
+            this.onCement = false;
     }
 
 }

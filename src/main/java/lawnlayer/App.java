@@ -59,7 +59,7 @@ public class App extends PApplet {
         this.beetle = loadImage(this.getClass().getResource("beetle.png").getPath());
         this.ball = loadImage(this.getClass().getResource("ball.png").getPath());
 
-        this.currentLevel = 0;
+        this.currentLevel = 1;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
 
         // create cement tiles
@@ -102,41 +102,53 @@ public class App extends PApplet {
 //        for (Cement cement: this.cementTiles)
 //            if (this.player.checkCling(cement))
 //                System.out.println("yes");
-//        System.out.println(this.player.onCement);
+//        System.out.println(this.player.slideDirection + " "+ this.player.upDownDirection+ " "+this.player.x+" "+this.player.y);
 
     }
 
     public void keyPressed() {
-        if (this.keyCode == 37 )
+        if (this.keyCode == 37 ) {
             this.player.leftMoving = true;
-        if (this.keyCode == 38)
-            this.player.upMoving = true;
-        if (this.keyCode == 39)
+
+                this.player.leftRightDirection = Direction.Left;
+
+        }
+        if (this.keyCode == 39 ) {
             this.player.rightMoving = true;
-        if (this.keyCode == 40)
+
+                this.player.leftRightDirection = Direction.Right;
+
+        }
+        if (this.keyCode == 38) {
+            this.player.upMoving = true;
+
+                this.player.upDownDirection = Direction.Up;
+
+        }
+        if (this.keyCode == 40) {
             this.player.downMoving = true;
+
+                this.player.upDownDirection = Direction.Down;
+
+        }
     }
 
     public void keyReleased() {
         if (this.keyCode == 37) {
             this.player.leftMoving = false;
-            if (this.player.x % SPRITESIZE != 0)
-                this.player.slideDirection = Direction.Left;
-        }
-        if (this.keyCode == 38) {
-            this.player.upMoving = false;
-            if (this.player.y % SPRITESIZE != 0)
-                this.player.slideDirection = Direction.Up;
+
         }
         if (this.keyCode == 39) {
             this.player.rightMoving = false;
-            if (this.player.x % SPRITESIZE != 0)
-                this.player.slideDirection = Direction.Right;
+
+        }
+        if (this.keyCode == 38) {
+            this.player.upMoving = false;
+
         }
         if (this.keyCode == 40) {
             this.player.downMoving = false;
-            if (this.player.y % SPRITESIZE != 0)
-                this.player.slideDirection = Direction.Down;
+
         }
     }
 
