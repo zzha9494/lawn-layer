@@ -33,6 +33,7 @@ public class App extends PApplet {
     public int maxLevel;
 
     public ArrayList<Cement> cementTiles;
+    public ArrayList<Grass> grasses;
     public ArrayList<Path> paths;
 
     public Player player;
@@ -69,6 +70,7 @@ public class App extends PApplet {
 
         // create cement tiles
         this.cementTiles = createCement(this);
+        this.grasses = new ArrayList<Grass>();
         this.paths = new ArrayList<Path>();
 
         // Initialise characters
@@ -101,6 +103,9 @@ public class App extends PApplet {
         for (Cement cement: this.cementTiles)
             cement.draw(this);
 
+        for (Grass grass: this.grasses)
+            grass.draw(this);
+
         for (Path path: this.paths)
             path.draw(this);
 
@@ -118,6 +123,7 @@ public class App extends PApplet {
 //        System.out.println(this.player.onCement+ " "+this.player.centerCement+" "+this.player.soilSlideDirection + this.player.x);
 //        System.out.println(this.player.x+ " "+this.player.y);
 //        System.out.println(this.paths.size() + " " +this.player.centerCement);
+//        System.out.println(this.grasses.size());
 
     }
 

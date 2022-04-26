@@ -138,8 +138,10 @@ public class Player extends Character {
     }
 
     public void createPath(App app) {
-        if (this.centerCement)
+        if (this.centerCement && app.paths.size() != 0) {
+            this.createGrass(app);
             app.paths.clear();
+        }
 
         if (this.x % 20 == 0 && this.y % 20 == 0) {
             for (Cement cement: app.cementTiles) {
@@ -148,6 +150,13 @@ public class Player extends Character {
             }
             Path path = new Path(this.x, this.y, app.green);
             app.paths.add(path);
+        }
+    }
+
+    public void createGrass(App app) {
+        for (Path path: app.paths) {
+            Grass grass = new Grass(path.x, path.y, app.grass);
+            app.grasses.add(grass);
         }
     }
 
