@@ -38,6 +38,12 @@ public class Enemy extends Character{
                 clingTiles.add(grass);
         }
 
+        for (Path path: app.paths) {
+            if (this.checkCling(path)) {
+                clingTiles.add(path);
+                path.turnRed(app);
+            }
+        }
         return clingTiles;
     }
 

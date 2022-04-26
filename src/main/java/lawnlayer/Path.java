@@ -9,4 +9,9 @@ public class Path extends Tile{
         super(x, y);
         this.sprite = sprite;
     }
+
+    public void turnRed(App app) {
+        this.isRed = true;
+        this.sprite = app.red;
+    }
 }
