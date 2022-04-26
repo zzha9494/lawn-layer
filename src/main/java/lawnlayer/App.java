@@ -39,6 +39,8 @@ public class App extends PApplet {
     public Player player;
     public ArrayList<Enemy> enemies;
 
+    public int timer;
+
     public App() {
         this.configPath = "config.json";
     }
@@ -78,6 +80,7 @@ public class App extends PApplet {
         this.enemies = createEnemies(this);
 
         // Finish
+        this.timer = 0;
         this.currentLevel++;
     }
 
@@ -88,6 +91,8 @@ public class App extends PApplet {
         background(244, 164, 96); // Sandy Brown
 
         //tick
+        this.timerIncrease();
+
         this.player.createPath(this);
         this.player.checkOnTile(this);
         this.player.tick();
@@ -96,8 +101,6 @@ public class App extends PApplet {
             enemy.changeDiagonal(this);
             enemy.tick();
         }
-
-
 
         // draw
         for (Cement cement: this.cementTiles)
@@ -127,6 +130,7 @@ public class App extends PApplet {
 //        if (this.paths.size() != 0)
 //            this.player.floodFill(this, this.paths.get(0));
 //        System.out.println(this.grasses.size());
+        System.out.println(timer);
 
     }
 
@@ -267,6 +271,22 @@ public class App extends PApplet {
         }
 
         return enemies;
+    }
+
+    public void timerIncrease() {
+        if (this.timer == 3)
+            this.timer = 0;
+
+        if (this.paths.size() == 0) {
+            this.timer = 0;
+            return;
+        }
+
+        for (Path path: this.paths)
+            if (path.isRed) {
+                this.timer++;
+                return;
+            }
     }
 
     public static void main(String[] args) {
