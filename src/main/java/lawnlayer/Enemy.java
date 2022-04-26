@@ -15,11 +15,11 @@ public class Enemy extends Character{
 
     public void randomSpawn(App app) {
         while(true) {
-            int x = (int)(Math.random()*64);
-            int y = (int)(Math.random()*32);
+            int x = (int)(Math.random()*62);
+            int y = (int)(Math.random()*30);
 
-            this.x = x * 20;
-            this.y = y * 20 + 80;
+            this.x = 20 + x * 20;
+            this.y = 20 + y * 20 + 80;
 
             if(this.collideCement(app) == null)
                 return;

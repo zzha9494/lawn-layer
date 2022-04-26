@@ -35,6 +35,7 @@ public class App extends PApplet {
     public ArrayList<Cement> cementTiles;
     public ArrayList<Grass> grasses;
     public ArrayList<Path> paths;
+    public ArrayList<Path> currentRed;
 
     public Player player;
     public ArrayList<Enemy> enemies;
@@ -67,13 +68,14 @@ public class App extends PApplet {
         this.green = loadImage(this.getClass().getResource("green.png").getPath());
         this.red = loadImage(this.getClass().getResource("red.png").getPath());
 
-        this.currentLevel = 1;
+        this.currentLevel = 0;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
 
         // create cement tiles
         this.cementTiles = createCement(this);
         this.grasses = new ArrayList<Grass>();
         this.paths = new ArrayList<Path>();
+        this.currentRed = new ArrayList<Path>();
 
         // Initialise characters
         this.player = createPlayer(this);
@@ -101,6 +103,9 @@ public class App extends PApplet {
             enemy.changeDiagonal(this);
             enemy.tick();
         }
+
+        for (Path path: this.currentRed)
+            path.propagateRed(this);
 
         // draw
         for (Cement cement: this.cementTiles)
@@ -130,7 +135,16 @@ public class App extends PApplet {
 //        if (this.paths.size() != 0)
 //            this.player.floodFill(this, this.paths.get(0));
 //        System.out.println(this.grasses.size());
-        System.out.println(timer);
+//        System.out.println(timer);
+//        for (Path path: this.paths)
+//            if(path.isRed)
+//                System.out.println("1");
+//        int temp = 0;
+//        for (Path path: this.paths) {
+//            if(path.isRed)
+//                temp++;
+//        }
+//        System.out.println(temp +" "+this.timer);
 
     }
 
@@ -274,8 +288,10 @@ public class App extends PApplet {
     }
 
     public void timerIncrease() {
-        if (this.timer == 3)
+        if (this.timer == 3) {
+            this.currentRed = this.getCurrentRed();
             this.timer = 0;
+        }
 
         if (this.paths.size() == 0) {
             this.timer = 0;
@@ -287,6 +303,14 @@ public class App extends PApplet {
                 this.timer++;
                 return;
             }
+    }
+
+    public ArrayList<Path> getCurrentRed() {
+        ArrayList<Path> redPaths = new ArrayList<Path>();
+        for(Path path: this.paths)
+            if(path.isRed)
+                redPaths.add(path);
+        return redPaths;
     }
 
     public static void main(String[] args) {
