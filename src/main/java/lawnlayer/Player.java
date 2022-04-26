@@ -5,8 +5,8 @@ import processing.core.PImage;
 public class Player extends Character {
     public Direction leftRightDirection;
     public Direction upDownDirection;
-    public Direction soilSlideDirection;
-    public Direction turn;
+    public Direction slideDirection;
+    public Direction turnDirection;
     public boolean centerCement;
     public boolean onCement;
     public boolean leftMoving;
@@ -35,13 +35,13 @@ public class Player extends Character {
 
     public void cementMoving() {
         if(this.centerCement) {
-            this.soilSlideDirection = Direction.Stop;
-            this.turn = Direction.Stop;
+            this.slideDirection = Direction.Stop;
+            this.turnDirection = Direction.Stop;
         }
 
         if(this.leftRightDirection == Direction.Left && this.y % 20 ==0) {
             if (this.centerCement)
-                this.soilSlideDirection = Direction.Left;
+                this.slideDirection = Direction.Left;
             this.x -= 2;
             if (this.x % 20 ==0 && !this.leftMoving)
                 this.leftRightDirection = Direction.Stop;
@@ -49,7 +49,7 @@ public class Player extends Character {
 
         if(this.leftRightDirection == Direction.Right  && this.y % 20 ==0) {
             if (this.centerCement)
-                this.soilSlideDirection = Direction.Right;
+                this.slideDirection = Direction.Right;
             this.x += 2;
             if (this.x % 20 ==0 && !this.rightMoving)
                 this.leftRightDirection = Direction.Stop;
@@ -57,7 +57,7 @@ public class Player extends Character {
 
         if(this.upDownDirection == Direction.Up && this.x % 20 ==0) {
             if (this.centerCement)
-                this.soilSlideDirection = Direction.Up;
+                this.slideDirection = Direction.Up;
             this.y -= 2;
             if (this.y % 20 ==0 && !this.upMoving)
                 this.upDownDirection = Direction.Stop;
@@ -65,7 +65,7 @@ public class Player extends Character {
 
         if(this.upDownDirection == Direction.Down && this.x % 20 ==0) {
             if (this.centerCement)
-               this.soilSlideDirection = Direction.Down;
+               this.slideDirection = Direction.Down;
             this.y += 2;
             if (this.y % 20 ==0 && !this.downMoving) {
                 this.upDownDirection = Direction.Stop;
@@ -82,43 +82,43 @@ public class Player extends Character {
         if (this.x % 20 == 0 && this.y % 20 == 0)
             this.slideTurnDirection();
 
-        if(this.soilSlideDirection == Direction.Left) {
+        if(this.slideDirection == Direction.Left) {
             this.x -= 2;
             this.leftRightDirection = Direction.Left;
         }
 
-        if(this.soilSlideDirection == Direction.Right) {
+        if(this.slideDirection == Direction.Right) {
             this.x += 2;
             this.leftRightDirection = Direction.Right;
         }
 
-        if(this.soilSlideDirection == Direction.Up) {
+        if(this.slideDirection == Direction.Up) {
             this.y -= 2;
             this.upDownDirection = Direction.Up;
         }
 
-        if(this.soilSlideDirection == Direction.Down) {
+        if(this.slideDirection == Direction.Down) {
             this.y += 2;
             this.upDownDirection = Direction.Down;
         }
     }
 
     public void slideTurnDirection() {
-        if (this.turn == Direction.Left) {
-            this.soilSlideDirection = Direction.Left;
-            this.turn = Direction.Stop;
+        if (this.turnDirection == Direction.Left) {
+            this.slideDirection = Direction.Left;
+            this.turnDirection = Direction.Stop;
         }
-        if (this.turn == Direction.Right) {
-            this.soilSlideDirection = Direction.Right;
-            this.turn = Direction.Stop;
+        if (this.turnDirection == Direction.Right) {
+            this.slideDirection = Direction.Right;
+            this.turnDirection = Direction.Stop;
         }
-        if (this.turn == Direction.Up) {
-            this.soilSlideDirection = Direction.Up;
-            this.turn = Direction.Stop;
+        if (this.turnDirection == Direction.Up) {
+            this.slideDirection = Direction.Up;
+            this.turnDirection = Direction.Stop;
         }
-        if (this.turn == Direction.Down) {
-            this.soilSlideDirection = Direction.Down;
-            this.turn = Direction.Stop;
+        if (this.turnDirection == Direction.Down) {
+            this.slideDirection = Direction.Down;
+            this.turnDirection = Direction.Stop;
         }
     }
 

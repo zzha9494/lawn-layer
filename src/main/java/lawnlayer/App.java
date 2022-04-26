@@ -113,31 +113,31 @@ public class App extends PApplet {
             this.player.leftMoving = true;
             this.player.leftRightDirection = Direction.Left;
 
-            if(this.player.soilSlideDirection == Direction.Up || this.player.soilSlideDirection == Direction.Down)
-                this.player.turn = Direction.Left;
+            if(this.player.slideDirection == Direction.Up || this.player.slideDirection == Direction.Down)
+                this.player.turnDirection = Direction.Left;
         }
 
         if (this.keyCode == 39 ) {
             this.player.rightMoving = true;
             this.player.leftRightDirection = Direction.Right;
 
-            if(this.player.soilSlideDirection == Direction.Up || this.player.soilSlideDirection == Direction.Down)
-                this.player.turn = Direction.Right;
+            if(this.player.slideDirection == Direction.Up || this.player.slideDirection == Direction.Down)
+                this.player.turnDirection = Direction.Right;
         }
 
         if (this.keyCode == 38) {
             this.player.upMoving = true;
             this.player.upDownDirection = Direction.Up;
 
-            if(this.player.soilSlideDirection == Direction.Left || this.player.soilSlideDirection == Direction.Right)
-                this.player.turn = Direction.Up;
+            if(this.player.slideDirection == Direction.Left || this.player.slideDirection == Direction.Right)
+                this.player.turnDirection = Direction.Up;
         }
 
         if (this.keyCode == 40) {
             this.player.downMoving = true;
             this.player.upDownDirection = Direction.Down;
-            if(this.player.soilSlideDirection == Direction.Left || this.player.soilSlideDirection == Direction.Right)
-                this.player.turn = Direction.Down;
+            if(this.player.slideDirection == Direction.Left || this.player.slideDirection == Direction.Right)
+                this.player.turnDirection = Direction.Down;
         }
     }
 
