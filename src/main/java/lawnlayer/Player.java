@@ -6,7 +6,8 @@ public class Player extends Character {
     public Direction leftRightDirection;
     public Direction upDownDirection;
     public Direction soilSlideDirection;
-    public boolean turnHead;
+    public Direction turn;
+    public boolean centerCement;
     public boolean onCement;
     public boolean leftMoving;
     public boolean rightMoving;
@@ -27,36 +28,49 @@ public class Player extends Character {
 
     public void tick() {
 //        if (this.slideDirection != Direction.Stop)
-                this.slideSnapGrid();
-//        else {
-////            if (this.onCement)
-//                this.cementMoving();
-////            else
-////                this.soilMoving();
-//        }
+//        if (this.centerCement)
+//            this.soilSlideDirection = Direction.Stop;
+
+        if(this.onCement)
+            this.cementMoving();
+        else
+            this.soilMoving();
     }
 
-    public void slideSnapGrid() {
+    public void cementMoving() {
+        if(this.centerCement) {
+            this.soilSlideDirection = Direction.Stop;
+            this.turn = Direction.Stop;
+        }
+
 
         if(this.leftRightDirection == Direction.Left && this.y % 20 ==0) {
+            if (this.centerCement)
+                this.soilSlideDirection = Direction.Left;
             this.x -= 2;
             if (this.x % 20 ==0 && !this.leftMoving)
                 this.leftRightDirection = Direction.Stop;
         }
 
         if(this.leftRightDirection == Direction.Right  && this.y % 20 ==0) {
+            if (this.centerCement)
+                this.soilSlideDirection = Direction.Right;
             this.x += 2;
             if (this.x % 20 ==0 && !this.rightMoving)
                 this.leftRightDirection = Direction.Stop;
         }
 
         if(this.upDownDirection == Direction.Up && this.x % 20 ==0) {
+            if (this.centerCement)
+                this.soilSlideDirection = Direction.Up;
             this.y -= 2;
             if (this.y % 20 ==0 && !this.upMoving)
                 this.upDownDirection = Direction.Stop;
         }
 
         if(this.upDownDirection == Direction.Down && this.x % 20 ==0) {
+            if (this.centerCement)
+               this.soilSlideDirection = Direction.Down;
             this.y += 2;
             if (this.y % 20 ==0 && !this.downMoving) {
                 this.upDownDirection = Direction.Stop;
@@ -66,37 +80,69 @@ public class Player extends Character {
     }
 
     public void soilMoving() {
-        if (this.soilSlideDirection == Direction.Left)
+        if(!this.onCement) {
+            this.leftRightDirection = Direction.Stop;
+            this.upDownDirection = Direction.Stop;
+        }
+
+        if (this.x % 20 == 0 && this.y % 20 == 0)
+            this.slideTurnDirection();
+
+        if(this.soilSlideDirection == Direction.Left) {
             this.x -= 2;
-        if (this.soilSlideDirection == Direction.Right)
+            this.leftRightDirection = Direction.Left;
+        }
+
+        if(this.soilSlideDirection == Direction.Right) {
             this.x += 2;
-        if (this.soilSlideDirection == Direction.Up)
+            this.leftRightDirection = Direction.Right;
+        }
+
+        if(this.soilSlideDirection == Direction.Up) {
             this.y -= 2;
-        if (this.soilSlideDirection == Direction.Down)
+            this.upDownDirection = Direction.Up;
+        }
+
+        if(this.soilSlideDirection == Direction.Down) {
             this.y += 2;
+            this.upDownDirection = Direction.Down;
+        }
     }
 
-    public void cementMoving() {
-        if (this.leftMoving || this.rightMoving) {
-            if (this.leftMoving  && this.x > 0)
-                this.x -= 2;
-            if (this.rightMoving && this.x < 1260)
-                this.x += 2;
-        } else if (this.upMoving || this.downMoving) {
-            if (this.upMoving  && this.y > 80)
-                this.y -= 2;
-            if (this.downMoving  && this.y < 700)
-                this.y += 2;
+    public void slideTurnDirection() {
+        if (this.turn == Direction.Left) {
+            this.soilSlideDirection = Direction.Left;
+            this.turn = Direction.Stop;
+        }
+        if (this.turn == Direction.Right) {
+            this.soilSlideDirection = Direction.Right;
+            this.turn = Direction.Stop;
+        }
+        if (this.turn == Direction.Up) {
+            this.soilSlideDirection = Direction.Up;
+            this.turn = Direction.Stop;
+        }
+        if (this.turn == Direction.Down) {
+            this.soilSlideDirection = Direction.Down;
+            this.turn = Direction.Stop;
         }
     }
 
     public void checkOnCement(App app) {
+
         if (this.collideCement(app) != null) {
             this.onCement = true;
-            this.soilSlideDirection = Direction.Stop;
         }
         else
             this.onCement = false;
+
+        for(Cement c: app.cementTiles){
+            if(c.x == this.x && c.y == this.y) {
+                this.centerCement = true;
+                return;
+            }
+        }
+        this.centerCement = false;
     }
 
 }

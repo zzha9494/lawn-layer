@@ -103,33 +103,42 @@ public class App extends PApplet {
 //            if (this.player.checkCling(cement))
 //                System.out.println("yes");
 //        System.out.println(this.player.slideDirection + " "+ this.player.upDownDirection+ " "+this.player.x+" "+this.player.y);
+//        System.out.println(this.player.onCement+ " "+this.player.centerCement+" "+this.player.soilSlideDirection + this.player.x);
+//        System.out.println(this.player.x+ " "+this.player.y);
 
     }
 
     public void keyPressed() {
         if (this.keyCode == 37 ) {
             this.player.leftMoving = true;
+            this.player.leftRightDirection = Direction.Left;
 
-                this.player.leftRightDirection = Direction.Left;
+            if(this.player.soilSlideDirection == Direction.Up || this.player.soilSlideDirection == Direction.Down)
+                this.player.turn = Direction.Left;
 
         }
         if (this.keyCode == 39 ) {
             this.player.rightMoving = true;
+            this.player.leftRightDirection = Direction.Right;
 
-                this.player.leftRightDirection = Direction.Right;
+            if(this.player.soilSlideDirection == Direction.Up || this.player.soilSlideDirection == Direction.Down)
+                this.player.turn = Direction.Right;
 
         }
         if (this.keyCode == 38) {
             this.player.upMoving = true;
+            this.player.upDownDirection = Direction.Up;
 
-                this.player.upDownDirection = Direction.Up;
+            if(this.player.soilSlideDirection == Direction.Left || this.player.soilSlideDirection == Direction.Right)
+                this.player.turn = Direction.Up;
 
         }
         if (this.keyCode == 40) {
             this.player.downMoving = true;
+            this.player.upDownDirection = Direction.Down;
 
-                this.player.upDownDirection = Direction.Down;
-
+            if(this.player.soilSlideDirection == Direction.Left || this.player.soilSlideDirection == Direction.Right)
+                this.player.turn = Direction.Down;
         }
     }
 
