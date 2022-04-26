@@ -27,10 +27,6 @@ public class Player extends Character {
     }
 
     public void tick() {
-//        if (this.slideDirection != Direction.Stop)
-//        if (this.centerCement)
-//            this.soilSlideDirection = Direction.Stop;
-
         if(this.onCement)
             this.cementMoving();
         else
@@ -42,7 +38,6 @@ public class Player extends Character {
             this.soilSlideDirection = Direction.Stop;
             this.turn = Direction.Stop;
         }
-
 
         if(this.leftRightDirection == Direction.Left && this.y % 20 ==0) {
             if (this.centerCement)
@@ -76,7 +71,6 @@ public class Player extends Character {
                 this.upDownDirection = Direction.Stop;
             }
         }
-
     }
 
     public void soilMoving() {
@@ -129,10 +123,8 @@ public class Player extends Character {
     }
 
     public void checkOnCement(App app) {
-
-        if (this.collideCement(app) != null) {
+        if (this.collideCement(app) != null)
             this.onCement = true;
-        }
         else
             this.onCement = false;
 

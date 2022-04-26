@@ -115,28 +115,27 @@ public class App extends PApplet {
 
             if(this.player.soilSlideDirection == Direction.Up || this.player.soilSlideDirection == Direction.Down)
                 this.player.turn = Direction.Left;
-
         }
+
         if (this.keyCode == 39 ) {
             this.player.rightMoving = true;
             this.player.leftRightDirection = Direction.Right;
 
             if(this.player.soilSlideDirection == Direction.Up || this.player.soilSlideDirection == Direction.Down)
                 this.player.turn = Direction.Right;
-
         }
+
         if (this.keyCode == 38) {
             this.player.upMoving = true;
             this.player.upDownDirection = Direction.Up;
 
             if(this.player.soilSlideDirection == Direction.Left || this.player.soilSlideDirection == Direction.Right)
                 this.player.turn = Direction.Up;
-
         }
+
         if (this.keyCode == 40) {
             this.player.downMoving = true;
             this.player.upDownDirection = Direction.Down;
-
             if(this.player.soilSlideDirection == Direction.Left || this.player.soilSlideDirection == Direction.Right)
                 this.player.turn = Direction.Down;
         }
@@ -145,19 +144,15 @@ public class App extends PApplet {
     public void keyReleased() {
         if (this.keyCode == 37) {
             this.player.leftMoving = false;
-
         }
         if (this.keyCode == 39) {
             this.player.rightMoving = false;
-
         }
         if (this.keyCode == 38) {
             this.player.upMoving = false;
-
         }
         if (this.keyCode == 40) {
             this.player.downMoving = false;
-
         }
     }
 
