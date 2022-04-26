@@ -89,7 +89,7 @@ public class App extends PApplet {
 
         //tick
         this.player.createPath(this);
-        this.player.checkOnCement(this);
+        this.player.checkOnTile(this);
         this.player.tick();
 
         for (Enemy enemy: this.enemies) {
@@ -123,7 +123,7 @@ public class App extends PApplet {
 //        System.out.println(this.player.onCement+ " "+this.player.centerCement+" "+this.player.soilSlideDirection + this.player.x);
 //        System.out.println(this.player.x+ " "+this.player.y);
 //        System.out.println(this.paths.size() + " " +this.player.centerCement);
-//        System.out.println(this.grasses.size());
+//        System.out.println(this.paths.size());
 
     }
 

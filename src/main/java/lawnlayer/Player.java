@@ -8,6 +8,7 @@ public class Player extends Character {
     public Direction slideDirection;
     public Direction turnDirection;
     public boolean centerCement;
+    public boolean centerGrass;
     public boolean hitCement;
     public boolean leftMoving;
     public boolean rightMoving;
@@ -122,7 +123,7 @@ public class Player extends Character {
         }
     }
 
-    public void checkOnCement(App app) {
+    public void checkOnTile(App app) {
         if (this.collideCement(app) != null)
             this.hitCement = true;
         else
@@ -131,25 +132,51 @@ public class Player extends Character {
         for(Cement c: app.cementTiles){
             if(c.x == this.x && c.y == this.y) {
                 this.centerCement = true;
-                return;
+                break;
             }
+            else
+                this.centerCement = false;
         }
-        this.centerCement = false;
+
+        for (Grass g: app.grasses) {
+            if(g.x == this.x && g.y == this.y) {
+                this.centerGrass = true;
+                break;
+            }
+            else
+                this.centerGrass = false;
+        }
+
     }
 
     public void createPath(App app) {
-        if (this.centerCement && app.paths.size() != 0) {
+        if ((this.centerCement || this.centerGrass) && app.paths.size() != 0) {
             this.createGrass(app);
             app.paths.clear();
         }
 
         if (this.x % 20 == 0 && this.y % 20 == 0) {
+            boolean createOne = true;
+
             for (Cement cement: app.cementTiles) {
-                if (this.x == cement.x && this.y == cement.y)
-                    return;
+                if (this.x == cement.x && this.y == cement.y) {
+                    createOne = false;
+                    break;
+                }
             }
-            Path path = new Path(this.x, this.y, app.green);
-            app.paths.add(path);
+            if (createOne) {
+                for (Grass grass: app.grasses) {
+                    if (this.x == grass.x && this.y == grass.y) {
+                        createOne = false;
+                        break;
+                    }
+                }
+            }
+
+            if (createOne) {
+                Path path = new Path(this.x, this.y, app.green);
+                app.paths.add(path);
+            }
         }
     }
 
