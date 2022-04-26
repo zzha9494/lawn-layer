@@ -120,4 +120,12 @@ public class Enemy extends Character{
         app.image(this.sprite, this.x, this.y);
     }
 
+    public boolean checkInRegion (ArrayList<Tile> region) {
+        for (Tile t: region) {
+            if (this.checkCollide(t))
+                return true;
+        }
+        return false;
+    }
+
 }

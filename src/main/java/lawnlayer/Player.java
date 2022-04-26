@@ -2,18 +2,24 @@ package lawnlayer;
 
 import processing.core.PImage;
 
+import java.util.ArrayList;
+
 public class Player extends Character {
     public Direction leftRightDirection;
     public Direction upDownDirection;
     public Direction slideDirection;
     public Direction turnDirection;
-    public boolean centerCement;
-    public boolean centerGrass;
-    public boolean hitCement;
+
     public boolean leftMoving;
     public boolean rightMoving;
     public boolean upMoving;
     public boolean downMoving;
+
+    public boolean centerCement;
+    public boolean centerGrass;
+    public boolean hitCement;
+
+    public ArrayList<Tile> tempGrasses;
 
     public int lives;
 
@@ -21,6 +27,7 @@ public class Player extends Character {
         super(x, y, sprite);
         this.leftRightDirection = Direction.Stop;
         this.upDownDirection = Direction.Stop;
+        this.tempGrasses = new ArrayList<Tile>();
     }
 
     public void setLives(int lives) {
@@ -153,6 +160,7 @@ public class Player extends Character {
         if ((this.centerCement || this.centerGrass) && app.paths.size() != 0) {
             this.createGrass(app);
             app.paths.clear();
+            return;
         }
 
         if (this.x % 20 == 0 && this.y % 20 == 0) {
@@ -184,6 +192,92 @@ public class Player extends Character {
         for (Path path: app.paths) {
             Grass grass = new Grass(path.x, path.y, app.grass);
             app.grasses.add(grass);
+        }
+//         call floodfill for every path
+        for (Path path: app.paths) {
+            this.floodFill(app, path);
+
+            //
+        }
+    }
+
+    public void floodFill(App app, Path p) {
+        if(!existsTile(app, p.x-20, p.y)) {
+            this.tempGrasses.add(new Tile(p.x-20, p.y));
+            this.contagious(app, this.tempGrasses.get(0));
+            this.encloseRegion(app);
+        }
+        if(!existsTile(app, p.x+20, p.y)) {
+            this.tempGrasses.add(new Tile(p.x+20, p.y));
+            this.contagious(app, this.tempGrasses.get(0));
+            this.encloseRegion(app);
+        }
+        if(!existsTile(app, p.x, p.y+20)) {
+            this.tempGrasses.add(new Tile(p.x, p.y+20));
+            this.contagious(app, this.tempGrasses.get(0));
+            this.encloseRegion(app);
+        }
+        if(!existsTile(app, p.x, p.y-20)) {
+            this.tempGrasses.add(new Tile(p.x, p.y-20));
+            this.contagious(app, this.tempGrasses.get(0));
+            this.encloseRegion(app);
+        }
+    }
+
+    public void contagious(App app, Tile t) {
+        if(!existsTile(app, t.x-20, t.y)) {
+            Tile temp = new Tile(t.x-20, t.y);
+            this.tempGrasses.add(temp);
+            contagious(app, temp);
+        }
+        if(!existsTile(app, t.x+20, t.y)) {
+            Tile temp = new Tile(t.x+20, t.y);
+            this.tempGrasses.add(temp);
+            contagious(app, temp);
+        }
+        if(!existsTile(app, t.x, t.y+20)) {
+            Tile temp = new Tile(t.x, t.y+20);
+            this.tempGrasses.add(temp);
+            contagious(app, temp);
+        }
+        if(!existsTile(app, t.x, t.y-20)) {
+            Tile temp = new Tile(t.x, t.y-20);
+            this.tempGrasses.add(temp);
+            contagious(app, temp);
+        }
+    }
+
+    public boolean existsTile(App app, int x, int y) {
+        for (Cement cement: app.cementTiles) {
+            if (cement.x == x && cement.y == y)
+                return true;
+        }
+        for (Grass grass: app.grasses) {
+            if (grass.x == x && grass.y == y)
+                return true;
+        }
+
+        for (Tile t: this.tempGrasses) {
+            if (t.x == x && t.y == y)
+                return true;
+        }
+        return false;
+    }
+
+    public void encloseRegion(App app) {
+        boolean allClear = true;
+        for (Enemy enemy: app.enemies) {
+            if (enemy.checkInRegion(this.tempGrasses)) {
+                tempGrasses.clear();
+                allClear = false;
+                break;
+            }
+        }
+
+        if (allClear) {
+            for (Tile tile: tempGrasses)
+                app.grasses.add(new Grass(tile.x, tile.y, app.grass));
+            tempGrasses.clear();
         }
     }
 

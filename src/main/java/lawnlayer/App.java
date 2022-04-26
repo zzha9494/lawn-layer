@@ -122,8 +122,11 @@ public class App extends PApplet {
 //        System.out.println(this.player.slideDirection + " "+ this.player.upDownDirection+ " "+this.player.x+" "+this.player.y);
 //        System.out.println(this.player.onCement+ " "+this.player.centerCement+" "+this.player.soilSlideDirection + this.player.x);
 //        System.out.println(this.player.x+ " "+this.player.y);
-//        System.out.println(this.paths.size() + " " +this.player.centerCement);
-//        System.out.println(this.paths.size());
+//        System.out.println(this.grasses.size());
+//        System.out.println(this.player.existsTile(this, 0, 100));
+//        if (this.paths.size() != 0)
+//            this.player.floodFill(this, this.paths.get(0));
+        System.out.println(this.grasses.size());
 
     }
 
