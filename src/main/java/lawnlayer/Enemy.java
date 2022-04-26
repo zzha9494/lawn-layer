@@ -3,6 +3,8 @@ package lawnlayer;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.util.ArrayList;
+
 public class Enemy extends Character{
     public Direction diagonal;
 
@@ -24,42 +26,59 @@ public class Enemy extends Character{
         }
     }
 
-    public Cement clingCement (App app) {
+    public ArrayList<Tile> clingCement (App app) {
+        ArrayList<Tile> clingTiles = new ArrayList<Tile>();
         for (Cement cement: app.cementTiles) {
             if (this.checkCling(cement))
-                return cement;
+                clingTiles.add(cement);
         }
-        return null;
+        return clingTiles;
     }
 
     public void changeDiagonal(App app) {
-        Tile clingWhat = this.clingCement(app);
-        if (clingWhat == null)
+        ArrayList<Tile> clingTiles = this.clingCement(app);
+        if (clingTiles.size() == 0)
             return;
 
-        if (this.x == clingWhat.x && this.y == clingWhat.y + 20)
+        System.out.println(clingTiles.size());
+
+        if (clingTiles.size() == 1) {
+            Tile clingWhat = clingTiles.get(0);
+            if (this.x == clingWhat.x && this.y == clingWhat.y + 20)
+                if (this.diagonal == Direction.TopRight)
+                    this.diagonal = Direction.BottomRight;
+                else
+                    this.diagonal = Direction.BottomLeft;
+
+            if (this.x == clingWhat.x && this.y + 20 == clingWhat.y)
+                if (this.diagonal == Direction.BottomRight)
+                    this.diagonal = Direction.TopRight;
+                else
+                    this.diagonal = Direction.TopLeft;
+
+            if (this.x == clingWhat.x + 20 && this.y == clingWhat.y)
+                if (this.diagonal == Direction.TopLeft)
+                    this.diagonal = Direction.TopRight;
+                else
+                    this.diagonal = Direction.BottomRight;
+
+            if (this.x + 20 == clingWhat.x && this.y == clingWhat.y)
+                if (this.diagonal == Direction.TopRight)
+                    this.diagonal = Direction.TopLeft;
+                else
+                    this.diagonal = Direction.BottomLeft;
+        }
+
+        if (clingTiles.size() == 2) {
             if (this.diagonal == Direction.TopRight)
-                this.diagonal = Direction.BottomRight;
-            else
                 this.diagonal = Direction.BottomLeft;
-
-        if (this.x == clingWhat.x && this.y + 20 == clingWhat.y)
-            if (this.diagonal == Direction.BottomRight)
-                this.diagonal = Direction.TopRight;
-            else
-                this.diagonal = Direction.TopLeft;
-
-        if (this.x == clingWhat.x + 20 && this.y == clingWhat.y)
-            if (this.diagonal == Direction.TopLeft)
-                this.diagonal = Direction.TopRight;
-            else
+            else if (this.diagonal == Direction.TopLeft)
                 this.diagonal = Direction.BottomRight;
-
-        if (this.x + 20 == clingWhat.x && this.y == clingWhat.y)
-            if (this.diagonal == Direction.TopRight)
+            else if (this.diagonal == Direction.BottomLeft)
+                this.diagonal = Direction.TopRight;
+            else if (this.diagonal == Direction.BottomRight)
                 this.diagonal = Direction.TopLeft;
-            else
-                this.diagonal = Direction.BottomLeft;
+        }
     }
 
     public void tick() {
