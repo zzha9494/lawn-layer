@@ -199,22 +199,23 @@ public class Player extends Character {
     }
 
     public void floodFill(App app, Path p) {
+        boolean encloseSuccess = false;
         if(!existsTile(app, p.x-20, p.y)) {
             this.tempGrasses.add(new Tile(p.x-20, p.y));
             this.contagious(app, this.tempGrasses.get(0));
-            this.encloseRegion(app);
+            encloseSuccess = this.encloseRegion(app);
         }
-        if(!existsTile(app, p.x+20, p.y)) {
+        if(!existsTile(app, p.x+20, p.y) && !encloseSuccess) {
             this.tempGrasses.add(new Tile(p.x+20, p.y));
             this.contagious(app, this.tempGrasses.get(0));
-            this.encloseRegion(app);
+            encloseSuccess = this.encloseRegion(app);
         }
-        if(!existsTile(app, p.x, p.y+20)) {
+        if(!existsTile(app, p.x, p.y+20) && !encloseSuccess) {
             this.tempGrasses.add(new Tile(p.x, p.y+20));
             this.contagious(app, this.tempGrasses.get(0));
-            this.encloseRegion(app);
+            encloseSuccess = this.encloseRegion(app);
         }
-        if(!existsTile(app, p.x, p.y-20)) {
+        if(!existsTile(app, p.x, p.y-20) && !encloseSuccess) {
             this.tempGrasses.add(new Tile(p.x, p.y-20));
             this.contagious(app, this.tempGrasses.get(0));
             this.encloseRegion(app);
@@ -261,7 +262,7 @@ public class Player extends Character {
         return false;
     }
 
-    public void encloseRegion(App app) {
+    public boolean encloseRegion(App app) {
         boolean allClear = true;
         for (Enemy enemy: app.enemies) {
             if (enemy.checkInRegion(this.tempGrasses)) {
@@ -275,7 +276,9 @@ public class Player extends Character {
             for (Tile tile: tempGrasses)
                 app.grasses.add(new Grass(tile.x, tile.y, app.grass));
             tempGrasses.clear();
+            return true;
         }
+        return false;
     }
 
 }
