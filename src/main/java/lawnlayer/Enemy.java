@@ -26,17 +26,23 @@ public class Enemy extends Character{
         }
     }
 
-    public ArrayList<Tile> clingCement (App app) {
+    public ArrayList<Tile> clingTiles(App app) {
         ArrayList<Tile> clingTiles = new ArrayList<Tile>();
         for (Cement cement: app.cementTiles) {
             if (this.checkCling(cement))
                 clingTiles.add(cement);
         }
+
+        for (Grass grass: app.grasses) {
+            if (this.checkCling(grass))
+                clingTiles.add(grass);
+        }
+
         return clingTiles;
     }
 
     public void changeDiagonal(App app) {
-        ArrayList<Tile> clingTiles = this.clingCement(app);
+        ArrayList<Tile> clingTiles = this.clingTiles(app);
         if (clingTiles.size() == 0)
             return;
 
