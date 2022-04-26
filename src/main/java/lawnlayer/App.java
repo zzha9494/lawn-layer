@@ -144,7 +144,8 @@ public class App extends PApplet {
 //            if(path.isRed)
 //                temp++;
 //        }
-//        System.out.println(temp +" "+this.timer);
+//        System.out.println(temp);
+//        System.out.println(this.currentRed.size());
 
     }
 
