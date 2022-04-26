@@ -193,12 +193,9 @@ public class Player extends Character {
             Grass grass = new Grass(path.x, path.y, app.grass);
             app.grasses.add(grass);
         }
-//         call floodfill for every path
-        for (Path path: app.paths) {
-            this.floodFill(app, path);
 
-            //
-        }
+        for (Path path: app.paths)
+            this.floodFill(app, path);
     }
 
     public void floodFill(App app, Path p) {

@@ -126,7 +126,7 @@ public class App extends PApplet {
 //        System.out.println(this.player.existsTile(this, 0, 100));
 //        if (this.paths.size() != 0)
 //            this.player.floodFill(this, this.paths.get(0));
-        System.out.println(this.grasses.size());
+//        System.out.println(this.grasses.size());
 
     }
 
