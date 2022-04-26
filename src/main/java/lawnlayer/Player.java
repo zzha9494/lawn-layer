@@ -47,7 +47,7 @@ public class Player extends Character {
                 this.leftRightDirection = Direction.Stop;
         }
 
-        if(this.leftRightDirection == Direction.Right  && this.y % 20 ==0) {
+        else if(this.leftRightDirection == Direction.Right  && this.y % 20 ==0) {
             if (this.centerCement)
                 this.slideDirection = Direction.Right;
             this.x += 2;
@@ -55,7 +55,7 @@ public class Player extends Character {
                 this.leftRightDirection = Direction.Stop;
         }
 
-        if(this.upDownDirection == Direction.Up && this.x % 20 ==0) {
+        else if(this.upDownDirection == Direction.Up && this.x % 20 ==0) {
             if (this.centerCement)
                 this.slideDirection = Direction.Up;
             this.y -= 2;
@@ -63,7 +63,7 @@ public class Player extends Character {
                 this.upDownDirection = Direction.Stop;
         }
 
-        if(this.upDownDirection == Direction.Down && this.x % 20 ==0) {
+        else if(this.upDownDirection == Direction.Down && this.x % 20 ==0) {
             if (this.centerCement)
                this.slideDirection = Direction.Down;
             this.y += 2;
