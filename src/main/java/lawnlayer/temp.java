@@ -19,7 +19,7 @@ public class temp{
 
 
 
-        System.out.println("1");
+//        System.out.println("1");
     }
 
     public static void read_json(App app) {

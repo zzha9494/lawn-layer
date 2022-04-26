@@ -40,8 +40,6 @@ public class Enemy extends Character{
         if (clingTiles.size() == 0)
             return;
 
-        System.out.println(clingTiles.size());
-
         if (clingTiles.size() == 1) {
             Tile clingWhat = clingTiles.get(0);
             if (this.x == clingWhat.x && this.y == clingWhat.y + 20)

@@ -33,6 +33,7 @@ public class App extends PApplet {
     public int maxLevel;
 
     public ArrayList<Cement> cementTiles;
+    public ArrayList<Path> paths;
 
     public Player player;
     public ArrayList<Enemy> enemies;
@@ -68,6 +69,7 @@ public class App extends PApplet {
 
         // create cement tiles
         this.cementTiles = createCement(this);
+        this.paths = new ArrayList<Path>();
 
         // Initialise characters
         this.player = createPlayer(this);
@@ -84,6 +86,7 @@ public class App extends PApplet {
         background(244, 164, 96); // Sandy Brown
 
         //tick
+        this.player.createPath(this);
         this.player.checkOnCement(this);
         this.player.tick();
 
@@ -92,9 +95,14 @@ public class App extends PApplet {
             enemy.tick();
         }
 
+
+
         // draw
         for (Cement cement: this.cementTiles)
             cement.draw(this);
+
+        for (Path path: this.paths)
+            path.draw(this);
 
         this.player.draw(this);
 
@@ -109,6 +117,7 @@ public class App extends PApplet {
 //        System.out.println(this.player.slideDirection + " "+ this.player.upDownDirection+ " "+this.player.x+" "+this.player.y);
 //        System.out.println(this.player.onCement+ " "+this.player.centerCement+" "+this.player.soilSlideDirection + this.player.x);
 //        System.out.println(this.player.x+ " "+this.player.y);
+//        System.out.println(this.paths.size() + " " +this.player.centerCement);
 
     }
 

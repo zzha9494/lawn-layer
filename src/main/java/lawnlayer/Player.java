@@ -8,7 +8,7 @@ public class Player extends Character {
     public Direction slideDirection;
     public Direction turnDirection;
     public boolean centerCement;
-    public boolean onCement;
+    public boolean hitCement;
     public boolean leftMoving;
     public boolean rightMoving;
     public boolean upMoving;
@@ -27,7 +27,7 @@ public class Player extends Character {
     }
 
     public void tick() {
-        if(this.onCement)
+        if(this.hitCement)
             this.cementMoving();
         else
             this.soilMoving();
@@ -74,7 +74,7 @@ public class Player extends Character {
     }
 
     public void soilMoving() {
-        if(!this.onCement) {
+        if(!this.hitCement) {
             this.leftRightDirection = Direction.Stop;
             this.upDownDirection = Direction.Stop;
         }
@@ -124,9 +124,9 @@ public class Player extends Character {
 
     public void checkOnCement(App app) {
         if (this.collideCement(app) != null)
-            this.onCement = true;
+            this.hitCement = true;
         else
-            this.onCement = false;
+            this.hitCement = false;
 
         for(Cement c: app.cementTiles){
             if(c.x == this.x && c.y == this.y) {
@@ -135,6 +135,20 @@ public class Player extends Character {
             }
         }
         this.centerCement = false;
+    }
+
+    public void createPath(App app) {
+        if (this.centerCement)
+            app.paths.clear();
+
+        if (this.x % 20 == 0 && this.y % 20 == 0) {
+            for (Cement cement: app.cementTiles) {
+                if (this.x == cement.x && this.y == cement.y)
+                    return;
+            }
+            Path path = new Path(this.x, this.y, app.green);
+            app.paths.add(path);
+        }
     }
 
 }
