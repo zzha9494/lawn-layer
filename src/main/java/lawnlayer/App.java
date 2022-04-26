@@ -26,6 +26,8 @@ public class App extends PApplet {
     public PImage worm;
     public PImage beetle;
     public PImage ball;
+    public PImage green;
+    public PImage red;
 
     public int currentLevel;
     public int maxLevel;
@@ -58,6 +60,8 @@ public class App extends PApplet {
         this.worm = loadImage(this.getClass().getResource("worm.png").getPath());
         this.beetle = loadImage(this.getClass().getResource("beetle.png").getPath());
         this.ball = loadImage(this.getClass().getResource("ball.png").getPath());
+        this.green = loadImage(this.getClass().getResource("green.png").getPath());
+        this.red = loadImage(this.getClass().getResource("red.png").getPath());
 
         this.currentLevel = 1;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
