@@ -29,6 +29,7 @@ public class App extends PApplet {
     public PImage green;
     public PImage red;
 
+    public boolean gameOver;
     public int currentLevel;
     public int maxLevel;
 
@@ -82,6 +83,7 @@ public class App extends PApplet {
         this.enemies = createEnemies(this);
 
         // Finish
+        this.gameOver = false;
         this.timer = 0;
         this.currentLevel++;
     }
@@ -93,19 +95,22 @@ public class App extends PApplet {
         background(244, 164, 96); // Sandy Brown
 
         //tick
-        this.timerIncrease();
+        if (!this.gameOver) {
+            this.timerIncrease();
 
-        this.player.createPath(this);
-        this.player.checkOnTile(this);
-        this.player.tick();
+            this.player.createPath(this);
+            this.player.checkOnTile(this);
+            this.player.checkLoseOneLife(this);
+            this.player.tick();
 
-        for (Enemy enemy: this.enemies) {
-            enemy.changeDiagonal(this);
-            enemy.tick();
+            for (Enemy enemy: this.enemies) {
+                enemy.changeDiagonal(this);
+                enemy.tick();
+            }
+
+            for (Path path: this.currentRed)
+                path.propagateRed(this);
         }
-
-        for (Path path: this.currentRed)
-            path.propagateRed(this);
 
         // draw
         for (Cement cement: this.cementTiles)
@@ -121,6 +126,9 @@ public class App extends PApplet {
 
         for (Enemy enemy: this.enemies)
             enemy.draw(this);
+
+        if (this.gameOver)
+            System.out.println("gameover");
 
         // test
 //        System.out.println(this.enemies.get(0).x + ", "+ this.enemies.get(0).y);
@@ -146,6 +154,8 @@ public class App extends PApplet {
 //        }
 //        System.out.println(temp);
 //        System.out.println(this.grasses.size());
+//        System.out.println(this.player.loseOneLife(this));
+//        System.out.println(this.player.lives);
 
     }
 

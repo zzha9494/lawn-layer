@@ -5,6 +5,9 @@ import processing.core.PImage;
 import java.util.ArrayList;
 
 public class Player extends Character {
+    public int lives;
+    public boolean alive;
+
     public Direction leftRightDirection;
     public Direction upDownDirection;
     public Direction slideDirection;
@@ -21,10 +24,9 @@ public class Player extends Character {
 
     public ArrayList<Tile> tempGrasses;
 
-    public int lives;
-
     public Player(int x, int y, PImage sprite) {
         super(x, y, sprite);
+        this.alive = true;
         this.leftRightDirection = Direction.Stop;
         this.upDownDirection = Direction.Stop;
         this.tempGrasses = new ArrayList<Tile>();
@@ -281,4 +283,45 @@ public class Player extends Character {
         return false;
     }
 
+    public void checkLoseOneLife(App app) {
+        for (Enemy enemy: app.enemies) {
+            if(this.checkCollide(enemy))
+                this.alive = false;
+        }
+
+        for (Path redPath: app.paths) {
+            if (redPath.isRed && this.checkCollide(redPath))
+                this.alive = false;
+        }
+
+        if(!this.alive)
+            this.playerRespawn(app);
+    }
+
+    public void playerRespawn(App app) {
+            if (this.lives == 0) {
+                app.gameOver = true;
+                return;
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            this.lives --;
+            this.alive = true;
+            this.moveOrigin(app);
+    }
+
+    public void moveOrigin(App app) {
+        this.x = 0;
+        this.y = 80;
+        this.leftRightDirection = Direction.Stop;
+        this.upDownDirection = Direction.Stop;
+        this.slideDirection = Direction.Stop;
+        this.turnDirection = Direction.Stop;
+        app.paths.clear();
+    }
 }
