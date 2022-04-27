@@ -145,7 +145,7 @@ public class App extends PApplet {
 //                temp++;
 //        }
 //        System.out.println(temp);
-//        System.out.println(this.currentRed.size());
+//        System.out.println(this.grasses.size());
 
     }
 
@@ -296,6 +296,7 @@ public class App extends PApplet {
 
         if (this.paths.size() == 0) {
             this.timer = 0;
+            this.currentRed.clear();
             return;
         }
 
