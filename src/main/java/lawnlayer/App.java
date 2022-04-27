@@ -69,18 +69,18 @@ public class App extends PApplet {
         this.green = loadImage(this.getClass().getResource("green.png").getPath());
         this.red = loadImage(this.getClass().getResource("red.png").getPath());
 
-        this.currentLevel = 1;
+        this.currentLevel = 0;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
 
         // create cement tiles
-        this.cementTiles = createCement(this);
+        this.cementTiles = this.createCement();
         this.grasses = new ArrayList<Grass>();
         this.paths = new ArrayList<Path>();
         this.currentRed = new ArrayList<Path>();
 
         // Initialise characters
-        this.player = createPlayer(this);
-        this.enemies = createEnemies(this);
+        this.player = this.createPlayer();
+        this.enemies = this.createEnemies();
 
         // Finish
         this.gameOver = false;
@@ -212,23 +212,23 @@ public class App extends PApplet {
         }
     }
 
-    public static ArrayList<Cement> createCement(App app) {
+    public ArrayList<Cement> createCement(App this) {
         ArrayList<Cement> cementTiles = new ArrayList<Cement>();
 
-        JSONArray levels = app.loadJSONObject(app.configPath).getJSONArray("levels");
-        boolean[][] grid = readMap(levels.getJSONObject(app.currentLevel).getString("outlay"));
+        JSONArray levels = this.loadJSONObject(this.configPath).getJSONArray("levels");
+        boolean[][] grid = readMap(levels.getJSONObject(this.currentLevel).getString("outlay"));
 
-        checkMapValid(grid);
+        this.checkMapValid(grid);
 
         for (int row = 0; row < grid.length; row++)
             for (int column = 0; column < grid[row].length; column++) {
                 if (grid[row][column])
-                    cementTiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, app.concrete));
+                    cementTiles.add(new Cement(column * SPRITESIZE, row * SPRITESIZE + TOPBAR, this.concrete));
             }
         return cementTiles;
     }
 
-    public static boolean[][] readMap(String path) {
+    public boolean[][] readMap(String path) {
         File f = new File(path);
         Scanner scan;
         boolean[][] grid = new boolean[32][64];
@@ -251,7 +251,7 @@ public class App extends PApplet {
         return grid;
     }
 
-    public static boolean checkMapValid(boolean[][] grid) throws Error{
+    public boolean checkMapValid(boolean[][] grid) throws Error{
         if (grid == null)
             throw new Error("Invalid Map.");
 
@@ -267,18 +267,18 @@ public class App extends PApplet {
         return true;
     }
 
-    public static Player createPlayer(App app) {
-        Player player = new Player(0, TOPBAR, app.ball);
-        int lives = app.loadJSONObject(app.configPath).getInt("lives");
+    public Player createPlayer() {
+        Player player = new Player(0, TOPBAR, this.ball);
+        int lives = this.loadJSONObject(this.configPath).getInt("lives");
         player.setLives(lives);
         return player;
     }
 
-    public static ArrayList<Enemy> createEnemies(App app) {
+    public ArrayList<Enemy> createEnemies() {
         ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
-        JSONArray levels = app.loadJSONObject(app.configPath).getJSONArray("levels");
-        JSONArray enemiesConfig = levels.getJSONObject(app.currentLevel).getJSONArray("enemies");
+        JSONArray levels = this.loadJSONObject(this.configPath).getJSONArray("levels");
+        JSONArray enemiesConfig = levels.getJSONObject(this.currentLevel).getJSONArray("enemies");
         int enemiesCount = enemiesConfig.size();
 
         for (int i = 0; i < enemiesCount; i++) {
@@ -286,16 +286,17 @@ public class App extends PApplet {
             Enemy enemy;
 
             if (currentEnemy.getInt("type") == 0)
-                enemy = new Enemy(0, 0, app.worm);
+                enemy = new Enemy(0, 0, this.worm);
             else if(currentEnemy.getInt("type") == 1)
-                enemy = new Bettle(0, 0, app.beetle);
+                enemy = new Bettle(0, 0, this.beetle);
             //can register new type enemy here
             else
-                enemy = new Enemy(0, 0, app.worm);
+                enemy = new Enemy(0, 0, this.worm);
 
             if (currentEnemy.getString("spawn").equals("random"))
-                enemy.randomSpawn(app);
+                enemy.randomSpawn(this);
             else {
+                // can read specific position here
                 enemy.x = 20 + 20 * i;
                 enemy.y = 100 + 20 * i;
             }
@@ -311,8 +312,8 @@ public class App extends PApplet {
         }
 
         if (this.paths.size() == 0) {
-            this.timer = 0;
             this.currentRed.clear();
+            this.timer = 0;
             return;
         }
 
