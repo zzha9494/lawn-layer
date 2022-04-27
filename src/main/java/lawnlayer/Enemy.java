@@ -7,10 +7,12 @@ import java.util.ArrayList;
 
 public class Enemy extends Character{
     public Direction diagonal;
+    public int type;
 
     public Enemy(int x, int y, PImage sprite) {
         super(x, y, sprite);
         this.diagonal = this.initialDiagonal();
+        type = 0;
     }
 
     public void randomSpawn(App app) {
@@ -132,6 +134,11 @@ public class Enemy extends Character{
                 return true;
         }
         return false;
+    }
+
+    public void destroyGrass(App app) {
+        // throw ConcurrentModificationException using for-each
+        app.grasses.removeIf(grass -> this.checkCling(grass) || this.checkCollide(grass));
     }
 
 }

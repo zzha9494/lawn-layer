@@ -69,7 +69,7 @@ public class App extends PApplet {
         this.green = loadImage(this.getClass().getResource("green.png").getPath());
         this.red = loadImage(this.getClass().getResource("red.png").getPath());
 
-        this.currentLevel = 0;
+        this.currentLevel = 1;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
 
         // create cement tiles
@@ -108,6 +108,8 @@ public class App extends PApplet {
 
             for (Enemy enemy: this.enemies) {
                 enemy.changeDiagonal(this);
+                if (enemy.type == 1)
+                     enemy.destroyGrass(this);
                 enemy.tick();
             }
 
@@ -279,12 +281,15 @@ public class App extends PApplet {
 
         for (int i = 0; i < enemiesCount; i++) {
             JSONObject currentEnemy = enemiesConfig.getJSONObject(i);
-            Enemy enemy = new Enemy(0, 0, null);
+            Enemy enemy;
 
             if (currentEnemy.getInt("type") == 0)
-                enemy.sprite = app.worm;
+                enemy = new Enemy(0, 0, app.worm);
             else if(currentEnemy.getInt("type") == 1)
-                enemy.sprite = app.beetle;
+                enemy = new Bettle(0, 0, app.beetle);
+            //can register new type enemy here
+            else
+                enemy = new Enemy(0, 0, app.worm);
 
             if (currentEnemy.getString("spawn").equals("random"))
                 enemy.randomSpawn(app);
@@ -292,10 +297,8 @@ public class App extends PApplet {
                 enemy.x = 20 + 20 * i;
                 enemy.y = 100 + 20 * i;
             }
-
             enemies.add(enemy);
         }
-
         return enemies;
     }
 
