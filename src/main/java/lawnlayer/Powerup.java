@@ -57,7 +57,6 @@ public class Powerup extends Tile implements Spawn {
                 enemy.isFrozen = true;
         else if(this.type == 1)
             app.propagationSpeed = 6;
-
     }
 
     public void invalidPowerup(App app) {
