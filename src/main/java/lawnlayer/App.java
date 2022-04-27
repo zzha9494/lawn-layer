@@ -51,6 +51,7 @@ public class App extends PApplet {
     public int powerupDurationTimer;
     public int powerupSpawnTimer;
     public int randomInterval;
+    public int propagationSpeed;
 
     public App() {
         this.configPath = "config.json";
@@ -94,6 +95,7 @@ public class App extends PApplet {
         this.enemies = this.createEnemies();
 
         // Finish
+        this.propagationSpeed = 3;
         this.currentLevel++;
     }
 
@@ -146,6 +148,9 @@ public class App extends PApplet {
         if (this.unCollectedPowerup != null)
             this.unCollectedPowerup.draw(this);
 
+        if (this.collectedPowerup != null)
+            this.collectedPowerup.draw(this);
+
 
         // test
 //        System.out.println(this.enemies.get(0).x + ", "+ this.enemies.get(0).y);
@@ -181,7 +186,9 @@ public class App extends PApplet {
 //        System.out.println(this.randomInterval + " "+this.powerupTimer);
 //        System.out.println(this.player.duringPowerup);
 //        System.out.println(this.powerSpawnTimer);
-        System.out.println(this.unCollectedPowerup == null);
+//        System.out.println(this.unCollectedPowerup == null);
+//        if (this.collectedPowerup != null)
+//            System.out.println(this.collectedPowerup.type + " "+ this.powerupDurationTimer);
 
     }
 
@@ -328,7 +335,7 @@ public class App extends PApplet {
     }
 
     public void propagateTimerIncrease() {
-        if (this.propagateTimer == 3) {
+        if (this.propagateTimer >= this.propagationSpeed) {
             this.currentRed = this.getCurrentRed();
             this.propagateTimer = 0;
         }
@@ -361,10 +368,13 @@ public class App extends PApplet {
             randomInterval = 0;
         }
 
-        if (collectedPowerup != null)
+        if (collectedPowerup != null) {
             this.powerupDurationTimer++;
+            this.collectedPowerup.validPowerup(this);
+        }
 
-        if (this.powerupDurationTimer == 600) {
+        if (this.powerupDurationTimer == 600 && this.collectedPowerup != null) {
+            this.collectedPowerup.invalidPowerup(this);
             this.collectedPowerup = null;
             this.powerupDurationTimer = 0;
         }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Player extends Character {
     public int lives;
     public boolean alive;
+    public int speed;
 
     public boolean centerCement;
     public boolean centerGrass;
@@ -26,6 +27,7 @@ public class Player extends Character {
     public Player(int x, int y, PImage sprite) {
         super(x, y, sprite);
         this.alive = true;
+        this.speed = 2;
         this.leftRightDirection = Direction.Stop;
         this.upDownDirection = Direction.Stop;
         this.floodArea = new ArrayList<Tile>();
@@ -50,7 +52,7 @@ public class Player extends Character {
         if(this.leftRightDirection == Direction.Left && this.y % 20 ==0 && this.x > 0) {
             if (this.centerCement)
                 this.slideDirection = Direction.Left;
-            this.x -= 2;
+            this.x -= this.speed;
             if (this.x % 20 ==0 && !this.leftMoving)
                 this.leftRightDirection = Direction.Stop;
         }
@@ -58,7 +60,7 @@ public class Player extends Character {
         else if(this.leftRightDirection == Direction.Right  && this.y % 20 ==0 && this.x < 1260) {
             if (this.centerCement)
                 this.slideDirection = Direction.Right;
-            this.x += 2;
+            this.x += this.speed;
             if (this.x % 20 ==0 && !this.rightMoving)
                 this.leftRightDirection = Direction.Stop;
         }
@@ -66,7 +68,7 @@ public class Player extends Character {
         else if(this.upDownDirection == Direction.Up && this.x % 20 ==0 && this.y > 80) {
             if (this.centerCement)
                 this.slideDirection = Direction.Up;
-            this.y -= 2;
+            this.y -= this.speed;
             if (this.y % 20 ==0 && !this.upMoving)
                 this.upDownDirection = Direction.Stop;
         }
@@ -74,7 +76,7 @@ public class Player extends Character {
         else if(this.upDownDirection == Direction.Down && this.x % 20 ==0 && this.y < 700) {
             if (this.centerCement)
                this.slideDirection = Direction.Down;
-            this.y += 2;
+            this.y += this.speed;
             if (this.y % 20 ==0 && !this.downMoving) {
                 this.upDownDirection = Direction.Stop;
             }
@@ -91,22 +93,22 @@ public class Player extends Character {
             this.slideTurnDirection();
 
         if(this.slideDirection == Direction.Left) {
-            this.x -= 2;
+            this.x -= this.speed;
             this.leftRightDirection = Direction.Left;
         }
 
         if(this.slideDirection == Direction.Right) {
-            this.x += 2;
+            this.x += this.speed;
             this.leftRightDirection = Direction.Right;
         }
 
         if(this.slideDirection == Direction.Up) {
-            this.y -= 2;
+            this.y -= this.speed;
             this.upDownDirection = Direction.Up;
         }
 
         if(this.slideDirection == Direction.Down) {
-            this.y += 2;
+            this.y += this.speed;
             this.upDownDirection = Direction.Down;
         }
     }
@@ -271,7 +273,10 @@ public class Player extends Character {
         this.turnDirection = Direction.Stop;
 
         app.paths.clear();
-        app.collectedPowerup = null;
+        if (app.collectedPowerup != null) {
+            app.collectedPowerup.invalidPowerup(app);
+            app.collectedPowerup = null;
+        }
         app.unCollectedPowerup = null;
         app.powerupSpawnTimer = 0;
         app.powerupDurationTimer = 0;

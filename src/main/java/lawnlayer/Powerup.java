@@ -35,14 +35,37 @@ public class Powerup extends Tile implements Spawn {
 
     public void checkCollected(App app) {
         if (this.checkCollide(app.player)) {
+            if (app.collectedPowerup != null)
+                app.collectedPowerup.invalidPowerup(app);
+            this.x = 20;
+            this.y = 20;
             app.collectedPowerup = this;
+            this.validPowerup(app);
             app.unCollectedPowerup = null;
             app.powerupSpawnTimer = 0;
+            app.powerupDurationTimer = 0;
         }
         else if (this.checkInRegion(app.grasses)) {
             app.unCollectedPowerup = null;
             app.powerupSpawnTimer = 0;
         }
+    }
+
+    public void validPowerup(App app) {
+        if (this.type == 0)
+            for (Enemy enemy: app.enemies)
+                enemy.isFrozen = true;
+        else if(this.type == 1)
+            app.propagationSpeed = 6;
+
+    }
+
+    public void invalidPowerup(App app) {
+        if (this.type == 0)
+            for (Enemy enemy: app.enemies)
+                enemy.isFrozen = false;
+        else if(this.type == 1)
+            app.propagationSpeed = 3;
     }
 
 }

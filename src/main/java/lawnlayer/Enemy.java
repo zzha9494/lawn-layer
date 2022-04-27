@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Enemy extends Character implements Spawn {
     public Direction diagonal;
+    public int speed;
     public int type;
     public boolean isFrozen;
 
@@ -13,6 +14,7 @@ public class Enemy extends Character implements Spawn {
         super(x, y, sprite);
         this.diagonal = this.initialDiagonal();
         type = 0;
+        speed = 2;
     }
 
     public Direction initialDiagonal() {
@@ -111,20 +113,20 @@ public class Enemy extends Character implements Spawn {
 
     public void tick() {
         if (this.diagonal == Direction.TopLeft) {
-            this.x -= 2;
-            this.y -= 2;
+            this.x -= this.speed;
+            this.y -= this.speed;
         }
         if (this.diagonal == Direction.TopRight) {
-            this.x += 2;
-            this.y -= 2;
+            this.x += this.speed;
+            this.y -= this.speed;
         }
         if (this.diagonal == Direction.BottomLeft) {
-            this.x -= 2;
-            this.y += 2;
+            this.x -= this.speed;
+            this.y += this.speed;
         }
         if (this.diagonal == Direction.BottomRight) {
-            this.x += 2;
-            this.y += 2;
+            this.x += this.speed;
+            this.y += this.speed;
         }
 
     }
