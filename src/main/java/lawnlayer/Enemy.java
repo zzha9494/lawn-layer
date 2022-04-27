@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Enemy extends Character implements Spawn {
     public Direction diagonal;
     public int type;
+    public boolean isFrozen;
 
     public Enemy(int x, int y, PImage sprite) {
         super(x, y, sprite);

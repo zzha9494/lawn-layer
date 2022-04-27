@@ -47,7 +47,7 @@ public class App extends PApplet {
     public Powerup powerup;
 
     public int propagateTimer;
-    public int powerupTimer;
+    public int powerSpawnTimer;
     public int randomInterval;
 
     public App() {
@@ -107,7 +107,7 @@ public class App extends PApplet {
         //tick
         if (!this.gameOver) {
             this.propagateTimerIncrease();
-            this.powerupTimerIncrease();
+            this.powerupEvent();
 
             this.player.createPath(this);
             this.player.updatePositionFlag(this);
@@ -118,7 +118,8 @@ public class App extends PApplet {
                 enemy.reflectDirection(this);
                 if (enemy.type == 1)
                      enemy.destroyGrass(this);
-                enemy.tick();
+                if (!enemy.isFrozen)
+                    enemy.tick();
             }
 
             for (Path path: this.currentRed)
@@ -140,7 +141,7 @@ public class App extends PApplet {
         for (Enemy enemy: this.enemies)
             enemy.draw(this);
 
-        if (this.powerup != null)
+        if (this.powerup != null && !this.player.duringPowerup)
             this.powerup.draw(this);
 
 
@@ -176,6 +177,8 @@ public class App extends PApplet {
 //        if (this.powerupTimer % 60 == 0)
 //            System.out.println(this.powerupTimer);
 //        System.out.println(this.randomInterval + " "+this.powerupTimer);
+//        System.out.println(this.player.duringPowerup);
+//        System.out.println(this.powerSpawnTimer);
 
     }
 
@@ -340,20 +343,32 @@ public class App extends PApplet {
             }
     }
 
-    public void powerupTimerIncrease() {
-        this.powerupTimer++;
+    public void powerupEvent() {
+        // -1 pause
+        if (this.powerSpawnTimer != -1)
+            this.powerSpawnTimer++;
 
-        // 5-10s
-        if (this.randomInterval == 0) {
+        // 5-10s get interval
+        if (this.randomInterval == 0 && !this.player.duringPowerup) {
             this.randomInterval = 300 + (int)(Math.random()*300);
         }
 
-        if(this.powerupTimer == this.randomInterval && this.powerup == null) {
+        //create new powerup and pause timer
+        if(this.powerSpawnTimer == this.randomInterval && !this.player.duringPowerup && this.powerup == null) {
             this.powerup = new Powerup(this);
-            this.powerupTimer = 0;
             randomInterval = 0;
+            this.powerSpawnTimer = -1;
         }
 
+        // power ends and clear all
+        if (this.powerSpawnTimer == 600) {
+            this.player.duringPowerup = false;
+            this.powerup = null;
+            this.powerSpawnTimer = 0;
+        }
+
+        if (this.powerup != null)
+            this.powerup.powerupCheck(this);
     }
 
     public ArrayList<Path> getCurrentRed() {

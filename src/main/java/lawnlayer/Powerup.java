@@ -35,4 +35,13 @@ public class Powerup extends Tile implements Spawn {
         return null;
     }
 
+    public void powerupCheck(App app) {
+        if (this.checkCollide(app.player) && !this.valid && !app.player.duringPowerup) {
+            this.valid = true;
+            app.player.duringPowerup = true;
+            app.powerSpawnTimer = 0;
+        }
+
+    }
+
 }

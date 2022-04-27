@@ -11,6 +11,7 @@ public class Player extends Character {
     public boolean centerCement;
     public boolean centerGrass;
     public boolean hitCement;
+    public boolean duringPowerup;
 
     public boolean leftMoving;
     public boolean rightMoving;
@@ -259,6 +260,10 @@ public class Player extends Character {
         }
 
         this.alive = true;
+        this.duringPowerup = false;
+        app.powerup = null;
+        app.powerSpawnTimer = 0;
+        app.randomInterval = 0;
         this.moveOrigin(app);
     }
 
