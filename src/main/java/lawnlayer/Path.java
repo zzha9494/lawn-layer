@@ -8,8 +8,7 @@ public class Path extends Tile{
     public Boolean isRed;
 
     public Path(int x, int y, PImage sprite) {
-        super(x, y);
-        this.sprite = sprite;
+        super(x, y, sprite);
         this.isRed = false;
     }
 
