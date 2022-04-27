@@ -195,22 +195,22 @@ public class Player extends Character {
 
     public void floodFill(App app, Path p) {
         boolean encloseSuccess = false;
-        if(!existsTile(app, p.x-20, p.y)) {
+        if(isPlainSoil(app, p.x-20, p.y)) {
             this.tempGrasses.add(new Tile(p.x-20, p.y));
             this.contagious(app, this.tempGrasses.get(0));
             encloseSuccess = this.encloseRegion(app);
         }
-        if(!existsTile(app, p.x+20, p.y) && !encloseSuccess) {
+        if(isPlainSoil(app, p.x+20, p.y) && !encloseSuccess) {
             this.tempGrasses.add(new Tile(p.x+20, p.y));
             this.contagious(app, this.tempGrasses.get(0));
             encloseSuccess = this.encloseRegion(app);
         }
-        if(!existsTile(app, p.x, p.y+20) && !encloseSuccess) {
+        if(isPlainSoil(app, p.x, p.y+20) && !encloseSuccess) {
             this.tempGrasses.add(new Tile(p.x, p.y+20));
             this.contagious(app, this.tempGrasses.get(0));
             encloseSuccess = this.encloseRegion(app);
         }
-        if(!existsTile(app, p.x, p.y-20) && !encloseSuccess) {
+        if(isPlainSoil(app, p.x, p.y-20) && !encloseSuccess) {
             this.tempGrasses.add(new Tile(p.x, p.y-20));
             this.contagious(app, this.tempGrasses.get(0));
             this.encloseRegion(app);
@@ -218,43 +218,36 @@ public class Player extends Character {
     }
 
     public void contagious(App app, Tile t) {
-        if(!existsTile(app, t.x-20, t.y)) {
+        if(isPlainSoil(app, t.x-20, t.y)) {
             Tile temp = new Tile(t.x-20, t.y);
             this.tempGrasses.add(temp);
             contagious(app, temp);
         }
-        if(!existsTile(app, t.x+20, t.y)) {
+        if(isPlainSoil(app, t.x+20, t.y)) {
             Tile temp = new Tile(t.x+20, t.y);
             this.tempGrasses.add(temp);
             contagious(app, temp);
         }
-        if(!existsTile(app, t.x, t.y+20)) {
+        if(isPlainSoil(app, t.x, t.y+20)) {
             Tile temp = new Tile(t.x, t.y+20);
             this.tempGrasses.add(temp);
             contagious(app, temp);
         }
-        if(!existsTile(app, t.x, t.y-20)) {
+        if(isPlainSoil(app, t.x, t.y-20)) {
             Tile temp = new Tile(t.x, t.y-20);
             this.tempGrasses.add(temp);
             contagious(app, temp);
         }
     }
 
-    public boolean existsTile(App app, int x, int y) {
-        for (Cement cement: app.cementTiles) {
-            if (cement.x == x && cement.y == y)
-                return true;
-        }
-        for (Grass grass: app.grasses) {
-            if (grass.x == x && grass.y == y)
-                return true;
-        }
-
-        for (Tile t: this.tempGrasses) {
-            if (t.x == x && t.y == y)
-                return true;
-        }
-        return false;
+    public boolean isPlainSoil(App app, int x, int y) {
+        if(this.existsTile(x, y, app.cementTiles))
+            return false;
+        if(this.existsTile(x, y, app.grasses))
+            return false;
+        if(this.existsTile(x, y, this.tempGrasses))
+            return false;
+        return true;
     }
 
     public boolean encloseRegion(App app) {
@@ -276,16 +269,13 @@ public class Player extends Character {
         return false;
     }
 
-    public void checkLoseOneLife(App app) {
-        for (Enemy enemy: app.enemies) {
-            if(this.checkCollide(enemy))
-                this.alive = false;
-        }
 
-        for (Path redPath: app.paths) {
-            if (redPath.isRed && this.checkCollide(redPath))
-                this.alive = false;
-        }
+    public void checkLoseOneLife(App app) {
+        if(this.checkInRegion(app.enemies))
+            this.alive = false;
+
+        if(this.checkInRegion(app.currentRed))
+            this.alive = false;
 
         for (int i = 0; i < app.paths.size()-1; i++) {
             if (this.checkCollide(app.paths.get(i)))
@@ -322,6 +312,7 @@ public class Player extends Character {
         this.turnDirection = Direction.Stop;
         app.paths.clear();
     }
+
 
     public void tick() {
         if(this.hitCement)
