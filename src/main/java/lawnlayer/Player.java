@@ -274,7 +274,7 @@ public class Player extends Character {
         app.collectedPowerup = null;
         app.unCollectedPowerup = null;
         app.powerupSpawnTimer = 0;
-        app.powerDurationTimer = 0;
+        app.powerupDurationTimer = 0;
         app.randomInterval = 0;
     }
 

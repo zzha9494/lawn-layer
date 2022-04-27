@@ -39,6 +39,10 @@ public class Powerup extends Tile implements Spawn {
             app.unCollectedPowerup = null;
             app.powerupSpawnTimer = 0;
         }
+        else if (this.checkInRegion(app.grasses)) {
+            app.unCollectedPowerup = null;
+            app.powerupSpawnTimer = 0;
+        }
     }
 
 }

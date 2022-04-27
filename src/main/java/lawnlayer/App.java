@@ -48,7 +48,7 @@ public class App extends PApplet {
     public Powerup unCollectedPowerup;
 
     public int propagateTimer;
-    public int powerDurationTimer;
+    public int powerupDurationTimer;
     public int powerupSpawnTimer;
     public int randomInterval;
 
@@ -181,6 +181,7 @@ public class App extends PApplet {
 //        System.out.println(this.randomInterval + " "+this.powerupTimer);
 //        System.out.println(this.player.duringPowerup);
 //        System.out.println(this.powerSpawnTimer);
+        System.out.println(this.unCollectedPowerup == null);
 
     }
 
@@ -360,12 +361,12 @@ public class App extends PApplet {
             randomInterval = 0;
         }
 
-        if (collectedPowerup != null) {
-            this.powerDurationTimer++;
-        }
+        if (collectedPowerup != null)
+            this.powerupDurationTimer++;
 
-        if (this.powerDurationTimer == 600) {
+        if (this.powerupDurationTimer == 600) {
             this.collectedPowerup = null;
+            this.powerupDurationTimer = 0;
         }
 
     }
