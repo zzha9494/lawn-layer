@@ -23,7 +23,7 @@ public class Enemy extends Character{
             this.x = 20 + x * 20;
             this.y = 20 + y * 20 + 80;
 
-            if(this.collideCement(app) == null)
+            if(!this.collideCement(app))
                 return;
         }
     }

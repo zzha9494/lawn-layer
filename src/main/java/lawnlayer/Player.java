@@ -133,7 +133,7 @@ public class Player extends Character {
     }
 
     public void checkOnTile(App app) {
-        if (this.collideCement(app) != null)
+        if (this.collideCement(app))
             this.hitCement = true;
         else
             this.hitCement = false;

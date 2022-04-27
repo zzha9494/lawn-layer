@@ -13,11 +13,11 @@ public abstract class Character extends Element{
         return Math.abs(this.x - t.x) < 20 && Math.abs(this.y - t.y) < 20;
     }
 
-    public Cement collideCement (App app) {
+    public boolean collideCement (App app) {
         for (Cement cement: app.cementTiles)
             if (this.checkCollide(cement))
-                return cement;
-        return null;
+                return true;
+        return false;
     }
 
     public abstract void tick();
