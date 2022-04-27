@@ -126,10 +126,7 @@ public class Player extends Character {
     }
 
     public void checkOnTile(App app) {
-        if (this.checkInRegion(app.cementTiles))
-            this.hitCement = true;
-        else
-            this.hitCement = false;
+        this.hitCement = this.checkInRegion(app.cementTiles);
 
         for(Cement c: app.cementTiles){
             if(c.x == this.x && c.y == this.y) {
