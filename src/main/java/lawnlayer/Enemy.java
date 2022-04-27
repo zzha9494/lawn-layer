@@ -4,7 +4,7 @@ import processing.core.PImage;
 
 import java.util.ArrayList;
 
-public class Enemy extends Character{
+public class Enemy extends Character implements Spawn {
     public Direction diagonal;
     public int type;
 

@@ -44,6 +44,8 @@ public class App extends PApplet {
     public Player player;
     public ArrayList<Enemy> enemies;
 
+    public Powerup powerup;
+
     public int timer;
 
     public App() {

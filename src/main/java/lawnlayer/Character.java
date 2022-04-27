@@ -10,17 +10,6 @@ public abstract class Character extends Element{
         super(x, y, sprite);
     }
 
-    public boolean checkCollide(Element t) {
-        return Math.abs(this.x - t.x) < 20 && Math.abs(this.y - t.y) < 20;
-    }
-
-    public <T extends Element> boolean checkInRegion (ArrayList<T> region) {
-        for (T t: region)
-            if (this.checkCollide(t))
-                return true;
-        return false;
-    }
-
     public <T extends Element> boolean existsTile(int x, int y, ArrayList<T> region) {
         for (T t: region)
             if (t.x == x && t.y == y)
