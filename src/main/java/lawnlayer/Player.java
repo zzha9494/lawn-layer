@@ -36,7 +36,13 @@ public class Player extends Character {
         this.lives = lives;
     }
 
-    public void cementMoving() {
+    public void updatePositionFlag(App app) {
+        this.hitCement = this.checkInRegion(app.cementTiles);
+        this.centerCement = this.existsTile(this.x, this.y, app.cementTiles);
+        this.centerGrass = this.existsTile(this.x, this.y, app.grasses);
+    }
+
+    public void normalMoving() {
         if(this.centerCement) {
             this.slideDirection = Direction.Stop;
             this.turnDirection = Direction.Stop;
@@ -125,28 +131,6 @@ public class Player extends Character {
         }
     }
 
-    public void checkOnTile(App app) {
-        this.hitCement = this.checkInRegion(app.cementTiles);
-
-        for(Cement c: app.cementTiles){
-            if(c.x == this.x && c.y == this.y) {
-                this.centerCement = true;
-                break;
-            }
-            else
-                this.centerCement = false;
-        }
-
-        for (Grass g: app.grasses) {
-            if(g.x == this.x && g.y == this.y) {
-                this.centerGrass = true;
-                break;
-            }
-            else
-                this.centerGrass = false;
-        }
-
-    }
 
     public void createPath(App app) {
         if ((this.centerCement || this.centerGrass) && app.paths.size() != 0) {
@@ -292,7 +276,7 @@ public class Player extends Character {
 
     public void tick() {
         if(this.hitCement)
-            this.cementMoving();
+            this.normalMoving();
         else
             this.soilMoving();
     }

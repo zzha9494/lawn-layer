@@ -102,7 +102,7 @@ public class App extends PApplet {
             this.timerIncrease();
 
             this.player.createPath(this);
-            this.player.checkOnTile(this);
+            this.player.updatePositionFlag(this);
             this.player.checkLoseOneLife(this);
             this.player.tick();
 
@@ -159,7 +159,8 @@ public class App extends PApplet {
 //        System.out.println(this.grasses.size());
 //        System.out.println(this.player.loseOneLife(this));
 //        System.out.println(this.player.lives);
-        System.out.println(this.grasses.size());
+//        System.out.println(this.grasses.size());
+//        System.out.println(this.player.centerCement +" "+this.player.centerGrass);
 
     }
 
