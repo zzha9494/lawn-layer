@@ -28,6 +28,8 @@ public class App extends PApplet {
     public PImage ball;
     public PImage green;
     public PImage red;
+    public PImage powerup_1;
+    public PImage powerup_2;
 
     public boolean gameOver;
     public int currentLevel;
@@ -69,6 +71,8 @@ public class App extends PApplet {
         this.ball = loadImage(this.getClass().getResource("ball.png").getPath());
         this.green = loadImage(this.getClass().getResource("green.png").getPath());
         this.red = loadImage(this.getClass().getResource("red.png").getPath());
+        this.powerup_1 = loadImage(this.getClass().getResource("powerup_1.png").getPath());
+        this.powerup_2 = loadImage(this.getClass().getResource("powerup_2.png").getPath());
 
         this.currentLevel = 0;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
