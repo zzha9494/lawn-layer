@@ -44,10 +44,12 @@ public class App extends PApplet {
     public Player player;
     public ArrayList<Enemy> enemies;
 
-    public Powerup powerup;
+    public Powerup collectedPowerup;
+    public Powerup unCollectedPowerup;
 
     public int propagateTimer;
-    public int powerSpawnTimer;
+    public int powerDurationTimer;
+    public int powerupSpawnTimer;
     public int randomInterval;
 
     public App() {
@@ -141,8 +143,8 @@ public class App extends PApplet {
         for (Enemy enemy: this.enemies)
             enemy.draw(this);
 
-        if (this.powerup != null && !this.player.duringPowerup)
-            this.powerup.draw(this);
+        if (this.unCollectedPowerup != null)
+            this.unCollectedPowerup.draw(this);
 
 
         // test
@@ -344,31 +346,28 @@ public class App extends PApplet {
     }
 
     public void powerupEvent() {
-        // -1 pause
-        if (this.powerSpawnTimer != -1)
-            this.powerSpawnTimer++;
-
         // 5-10s get interval
-        if (this.randomInterval == 0 && !this.player.duringPowerup) {
+        if (this.randomInterval == 0)
             this.randomInterval = 300 + (int)(Math.random()*300);
-        }
 
-        //create new powerup and pause timer
-        if(this.powerSpawnTimer == this.randomInterval && !this.player.duringPowerup && this.powerup == null) {
-            this.powerup = new Powerup(this);
+        if (this.unCollectedPowerup == null)
+            this.powerupSpawnTimer++;
+        else
+            this.unCollectedPowerup.checkCollected(this);
+
+        if(this.powerupSpawnTimer == this.randomInterval && this.unCollectedPowerup == null) {
+            this.unCollectedPowerup = new Powerup(this);
             randomInterval = 0;
-            this.powerSpawnTimer = -1;
         }
 
-        // power ends and clear all
-        if (this.powerSpawnTimer == 600) {
-            this.player.duringPowerup = false;
-            this.powerup = null;
-            this.powerSpawnTimer = 0;
+        if (collectedPowerup != null) {
+            this.powerDurationTimer++;
         }
 
-        if (this.powerup != null)
-            this.powerup.powerupCheck(this);
+        if (this.powerDurationTimer == 600) {
+            this.collectedPowerup = null;
+        }
+
     }
 
     public ArrayList<Path> getCurrentRed() {

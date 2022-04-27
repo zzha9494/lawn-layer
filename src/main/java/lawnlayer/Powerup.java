@@ -4,7 +4,6 @@ import processing.core.PImage;
 
 public class Powerup extends Tile implements Spawn {
     int type;
-    boolean valid;
 
     public Powerup(App app) {
         super(0, 0);
@@ -34,12 +33,12 @@ public class Powerup extends Tile implements Spawn {
         return null;
     }
 
-    public void powerupCheck(App app) {
-        if (this.checkCollide(app.player) && !app.player.duringPowerup) {
-            app.player.duringPowerup = true;
-            app.powerSpawnTimer = 0;
+    public void checkCollected(App app) {
+        if (this.checkCollide(app.player)) {
+            app.collectedPowerup = this;
+            app.unCollectedPowerup = null;
+            app.powerupSpawnTimer = 0;
         }
-
     }
 
 }

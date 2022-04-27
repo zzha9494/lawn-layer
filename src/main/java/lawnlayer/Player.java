@@ -11,7 +11,6 @@ public class Player extends Character {
     public boolean centerCement;
     public boolean centerGrass;
     public boolean hitCement;
-    public boolean duringPowerup;
 
     public boolean leftMoving;
     public boolean rightMoving;
@@ -265,15 +264,17 @@ public class Player extends Character {
     public void moveOrigin(App app) {
         this.x = 0;
         this.y = 80;
+        this.alive = true;
         this.leftRightDirection = Direction.Stop;
         this.upDownDirection = Direction.Stop;
         this.slideDirection = Direction.Stop;
         this.turnDirection = Direction.Stop;
-        this.alive = true;
-        this.duringPowerup = false;
+
         app.paths.clear();
-        app.powerup = null;
-        app.powerSpawnTimer = 0;
+        app.collectedPowerup = null;
+        app.unCollectedPowerup = null;
+        app.powerupSpawnTimer = 0;
+        app.powerDurationTimer = 0;
         app.randomInterval = 0;
     }
 
