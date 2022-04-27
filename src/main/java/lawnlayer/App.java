@@ -28,8 +28,8 @@ public class App extends PApplet {
     public PImage ball;
     public PImage green;
     public PImage red;
+    public PImage powerup_0;
     public PImage powerup_1;
-    public PImage powerup_2;
 
     public boolean gameOver;
     public int currentLevel;
@@ -46,7 +46,9 @@ public class App extends PApplet {
 
     public Powerup powerup;
 
-    public int timer;
+    public int propagateTimer;
+    public int powerupTimer;
+    public int randomInterval;
 
     public App() {
         this.configPath = "config.json";
@@ -73,8 +75,8 @@ public class App extends PApplet {
         this.ball = loadImage(this.getClass().getResource("ball.png").getPath());
         this.green = loadImage(this.getClass().getResource("green.png").getPath());
         this.red = loadImage(this.getClass().getResource("red.png").getPath());
+        this.powerup_0 = loadImage(this.getClass().getResource("powerup_0.png").getPath());
         this.powerup_1 = loadImage(this.getClass().getResource("powerup_1.png").getPath());
-        this.powerup_2 = loadImage(this.getClass().getResource("powerup_2.png").getPath());
 
         this.currentLevel = 0;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
@@ -90,8 +92,6 @@ public class App extends PApplet {
         this.enemies = this.createEnemies();
 
         // Finish
-        this.gameOver = false;
-        this.timer = 0;
         this.currentLevel++;
     }
 
@@ -106,7 +106,8 @@ public class App extends PApplet {
 
         //tick
         if (!this.gameOver) {
-            this.timerIncrease();
+            this.propagateTimerIncrease();
+            this.powerupTimerIncrease();
 
             this.player.createPath(this);
             this.player.updatePositionFlag(this);
@@ -139,6 +140,9 @@ public class App extends PApplet {
         for (Enemy enemy: this.enemies)
             enemy.draw(this);
 
+        if (this.powerup != null)
+            this.powerup.draw(this);
+
 
         // test
 //        System.out.println(this.enemies.get(0).x + ", "+ this.enemies.get(0).y);
@@ -169,6 +173,9 @@ public class App extends PApplet {
 //        System.out.println(this.grasses.size());
 //        System.out.println(this.player.centerCement +" "+this.player.centerGrass);
 //        System.out.println(this.goal);
+//        if (this.powerupTimer % 60 == 0)
+//            System.out.println(this.powerupTimer);
+//        System.out.println(this.randomInterval + " "+this.powerupTimer);
 
     }
 
@@ -314,23 +321,39 @@ public class App extends PApplet {
         return enemies;
     }
 
-    public void timerIncrease() {
-        if (this.timer == 3) {
+    public void propagateTimerIncrease() {
+        if (this.propagateTimer == 3) {
             this.currentRed = this.getCurrentRed();
-            this.timer = 0;
+            this.propagateTimer = 0;
         }
 
         if (this.paths.size() == 0) {
             this.currentRed.clear();
-            this.timer = 0;
+            this.propagateTimer = 0;
             return;
         }
 
         for (Path path: this.paths)
             if (path.isRed) {
-                this.timer++;
+                this.propagateTimer++;
                 return;
             }
+    }
+
+    public void powerupTimerIncrease() {
+        this.powerupTimer++;
+
+        // 5-10s
+        if (this.randomInterval == 0) {
+            this.randomInterval = 300 + (int)(Math.random()*300);
+        }
+
+        if(this.powerupTimer == this.randomInterval && this.powerup == null) {
+            this.powerup = new Powerup(this);
+            this.powerupTimer = 0;
+            randomInterval = 0;
+        }
+
     }
 
     public ArrayList<Path> getCurrentRed() {

@@ -7,10 +7,11 @@ public class Powerup extends Tile implements Spawn {
     boolean visible;
     boolean valid;
 
-    public Powerup(int x, int y) {
-        super(x, y);
-        this.visible = false;
-        this.valid = false;
+    public Powerup(App app) {
+        super(0, 0);
+        this.randomSpawn(app);
+        this.type = app.randomInterval % 2;
+        this.sprite = this.chooseType(app);
     }
 
     public void randomSpawn(App app) {
@@ -25,4 +26,13 @@ public class Powerup extends Tile implements Spawn {
                 return;
         }
     }
+
+    public PImage chooseType(App app) {
+        if (this.type == 0)
+            return app.powerup_0;
+        if (this.type == 1)
+            return app.powerup_1;
+        return null;
+    }
+
 }
