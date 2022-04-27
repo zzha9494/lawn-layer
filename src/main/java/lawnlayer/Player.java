@@ -22,14 +22,14 @@ public class Player extends Character {
     public boolean centerGrass;
     public boolean hitCement;
 
-    public ArrayList<Tile> tempGrasses;
+    public ArrayList<Tile> floodArea;
 
     public Player(int x, int y, PImage sprite) {
         super(x, y, sprite);
         this.alive = true;
         this.leftRightDirection = Direction.Stop;
         this.upDownDirection = Direction.Stop;
-        this.tempGrasses = new ArrayList<Tile>();
+        this.floodArea = new ArrayList<Tile>();
     }
 
     public void setLives(int lives) {
@@ -156,27 +156,11 @@ public class Player extends Character {
         }
 
         if (this.x % 20 == 0 && this.y % 20 == 0) {
-            boolean createOne = true;
-
-            for (Cement cement: app.cementTiles) {
-                if (this.x == cement.x && this.y == cement.y) {
-                    createOne = false;
-                    break;
-                }
-            }
-            if (createOne) {
-                for (Grass grass: app.grasses) {
-                    if (this.x == grass.x && this.y == grass.y) {
-                        createOne = false;
-                        break;
-                    }
-                }
-            }
-
-            if (createOne) {
-                Path path = new Path(this.x, this.y, app.green);
-                app.paths.add(path);
-            }
+            if(this.existsTile(this.x, this.y, app.cementTiles))
+                return;
+            if(this.existsTile(this.x, this.y, app.grasses))
+                return;
+            app.paths.add(new Path(this.x, this.y, app.green));
         }
     }
 
@@ -187,53 +171,54 @@ public class Player extends Character {
         }
 
         for (Path path: app.paths)
-            this.floodFill(app, path);
+            this.captureTerritory(app, path);
     }
 
-    public void floodFill(App app, Path p) {
+
+    public void captureTerritory(App app, Path p) {
         boolean encloseSuccess = false;
         if(isPlainSoil(app, p.x-20, p.y)) {
-            this.tempGrasses.add(new Tile(p.x-20, p.y));
-            this.contagious(app, this.tempGrasses.get(0));
+            this.floodArea.add(new Tile(p.x-20, p.y));
+            this.floodFill(app, this.floodArea.get(0));
             encloseSuccess = this.encloseRegion(app);
         }
         if(isPlainSoil(app, p.x+20, p.y) && !encloseSuccess) {
-            this.tempGrasses.add(new Tile(p.x+20, p.y));
-            this.contagious(app, this.tempGrasses.get(0));
+            this.floodArea.add(new Tile(p.x+20, p.y));
+            this.floodFill(app, this.floodArea.get(0));
             encloseSuccess = this.encloseRegion(app);
         }
         if(isPlainSoil(app, p.x, p.y+20) && !encloseSuccess) {
-            this.tempGrasses.add(new Tile(p.x, p.y+20));
-            this.contagious(app, this.tempGrasses.get(0));
+            this.floodArea.add(new Tile(p.x, p.y+20));
+            this.floodFill(app, this.floodArea.get(0));
             encloseSuccess = this.encloseRegion(app);
         }
         if(isPlainSoil(app, p.x, p.y-20) && !encloseSuccess) {
-            this.tempGrasses.add(new Tile(p.x, p.y-20));
-            this.contagious(app, this.tempGrasses.get(0));
+            this.floodArea.add(new Tile(p.x, p.y-20));
+            this.floodFill(app, this.floodArea.get(0));
             this.encloseRegion(app);
         }
     }
 
-    public void contagious(App app, Tile t) {
+    public void floodFill(App app, Tile t) {
         if(isPlainSoil(app, t.x-20, t.y)) {
             Tile temp = new Tile(t.x-20, t.y);
-            this.tempGrasses.add(temp);
-            contagious(app, temp);
+            this.floodArea.add(temp);
+            floodFill(app, temp);
         }
         if(isPlainSoil(app, t.x+20, t.y)) {
             Tile temp = new Tile(t.x+20, t.y);
-            this.tempGrasses.add(temp);
-            contagious(app, temp);
+            this.floodArea.add(temp);
+            floodFill(app, temp);
         }
         if(isPlainSoil(app, t.x, t.y+20)) {
             Tile temp = new Tile(t.x, t.y+20);
-            this.tempGrasses.add(temp);
-            contagious(app, temp);
+            this.floodArea.add(temp);
+            floodFill(app, temp);
         }
         if(isPlainSoil(app, t.x, t.y-20)) {
             Tile temp = new Tile(t.x, t.y-20);
-            this.tempGrasses.add(temp);
-            contagious(app, temp);
+            this.floodArea.add(temp);
+            floodFill(app, temp);
         }
     }
 
@@ -242,28 +227,22 @@ public class Player extends Character {
             return false;
         if(this.existsTile(x, y, app.grasses))
             return false;
-        if(this.existsTile(x, y, this.tempGrasses))
+        if(this.existsTile(x, y, this.floodArea))
             return false;
         return true;
     }
 
     public boolean encloseRegion(App app) {
-        boolean allClear = true;
         for (Enemy enemy: app.enemies) {
-            if (enemy.checkInRegion(this.tempGrasses)) {
-                tempGrasses.clear();
-                allClear = false;
-                break;
+            if (enemy.checkInRegion(this.floodArea)) {
+                floodArea.clear();
+                return false;
             }
         }
-
-        if (allClear) {
-            for (Tile tile: tempGrasses)
-                app.grasses.add(new Grass(tile.x, tile.y, app.grass));
-            tempGrasses.clear();
-            return true;
-        }
-        return false;
+        for (Tile tile: floodArea)
+            app.grasses.add(new Grass(tile.x, tile.y, app.grass));
+        floodArea.clear();
+        return true;
     }
 
 
