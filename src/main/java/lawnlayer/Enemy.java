@@ -23,7 +23,7 @@ public class Enemy extends Character{
             this.x = 20 + x * 20;
             this.y = 20 + y * 20 + 80;
 
-            if(!this.collideCement(app))
+            if(!this.checkInRegion(app.cementTiles))
                 return;
         }
     }
@@ -126,14 +126,6 @@ public class Enemy extends Character{
 
     public void draw(PApplet app) {
         app.image(this.sprite, this.x, this.y);
-    }
-
-    public boolean checkInRegion (ArrayList<Tile> region) {
-        for (Tile t: region) {
-            if (this.checkCollide(t))
-                return true;
-        }
-        return false;
     }
 
     public void destroyGrass(App app) {
