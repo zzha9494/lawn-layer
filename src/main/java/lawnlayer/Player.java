@@ -259,11 +259,6 @@ public class Player extends Character {
             e.printStackTrace();
         }
 
-        this.alive = true;
-        this.duringPowerup = false;
-        app.powerup = null;
-        app.powerSpawnTimer = 0;
-        app.randomInterval = 0;
         this.moveOrigin(app);
     }
 
@@ -274,7 +269,12 @@ public class Player extends Character {
         this.upDownDirection = Direction.Stop;
         this.slideDirection = Direction.Stop;
         this.turnDirection = Direction.Stop;
+        this.alive = true;
+        this.duringPowerup = false;
         app.paths.clear();
+        app.powerup = null;
+        app.powerSpawnTimer = 0;
+        app.randomInterval = 0;
     }
 
 
