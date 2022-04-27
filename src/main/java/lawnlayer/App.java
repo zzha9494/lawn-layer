@@ -159,6 +159,7 @@ public class App extends PApplet {
 //        System.out.println(this.grasses.size());
 //        System.out.println(this.player.loseOneLife(this));
 //        System.out.println(this.player.lives);
+        System.out.println(this.grasses.size());
 
     }
 
