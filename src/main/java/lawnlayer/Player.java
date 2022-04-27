@@ -294,25 +294,30 @@ public class Player extends Character {
                 this.alive = false;
         }
 
+        for (int i = 0; i < app.paths.size()-1; i++) {
+            if (this.checkCollide(app.paths.get(i)))
+                this.alive = false;
+        }
+
         if(!this.alive)
             this.playerRespawn(app);
     }
 
     public void playerRespawn(App app) {
-            if (this.lives == 0) {
-                app.gameOver = true;
-                return;
-            }
+        this.lives --;
+        if (this.lives == 0) {
+            app.gameOver = true;
+            return;
+        }
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            this.lives --;
-            this.alive = true;
-            this.moveOrigin(app);
+        this.alive = true;
+        this.moveOrigin(app);
     }
 
     public void moveOrigin(App app) {
