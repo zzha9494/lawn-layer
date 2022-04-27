@@ -71,7 +71,6 @@ public class App extends PApplet {
         this.red = loadImage(this.getClass().getResource("red.png").getPath());
 
         this.currentLevel = 0;
-        this.goal = 0;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
 
         // create cement tiles
@@ -163,7 +162,7 @@ public class App extends PApplet {
 //        System.out.println(this.player.lives);
 //        System.out.println(this.grasses.size());
 //        System.out.println(this.player.centerCement +" "+this.player.centerGrass);
-        System.out.println(this.goal);
+//        System.out.println(this.goal);
 
     }
 
@@ -300,9 +299,9 @@ public class App extends PApplet {
             if (currentEnemy.getString("spawn").equals("random"))
                 enemy.randomSpawn(this);
             else {
-                // can read specific position here
-                enemy.x = 20 + 20 * i;
-                enemy.y = 100 + 20 * i;
+                String[] position = currentEnemy.getString("spawn").split(",");
+                enemy.x = SPRITESIZE * (Integer.parseInt(position[1]) - 1);
+                enemy.y = TOPBAR + SPRITESIZE * (Integer.parseInt(position[0]) - 1);
             }
             enemies.add(enemy);
         }
