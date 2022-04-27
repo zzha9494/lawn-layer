@@ -94,6 +94,9 @@ public class App extends PApplet {
     public void draw() {
         background(244, 164, 96); // Sandy Brown
 
+        if (this.gameOver)
+            System.out.println("gameover");
+
         //tick
         if (!this.gameOver) {
             this.timerIncrease();
@@ -127,8 +130,6 @@ public class App extends PApplet {
         for (Enemy enemy: this.enemies)
             enemy.draw(this);
 
-        if (this.gameOver)
-            System.out.println("gameover");
 
         // test
 //        System.out.println(this.enemies.get(0).x + ", "+ this.enemies.get(0).y);
