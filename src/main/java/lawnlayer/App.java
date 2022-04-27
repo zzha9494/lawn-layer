@@ -107,7 +107,7 @@ public class App extends PApplet {
             this.player.tick();
 
             for (Enemy enemy: this.enemies) {
-                enemy.changeDiagonal(this);
+                enemy.reflectDirection(this);
                 if (enemy.type == 1)
                      enemy.destroyGrass(this);
                 enemy.tick();

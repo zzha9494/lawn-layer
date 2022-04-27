@@ -36,13 +36,6 @@ public class Player extends Character {
         this.lives = lives;
     }
 
-    public void tick() {
-        if(this.hitCement)
-            this.cementMoving();
-        else
-            this.soilMoving();
-    }
-
     public void cementMoving() {
         if(this.centerCement) {
             this.slideDirection = Direction.Stop;
@@ -328,5 +321,12 @@ public class Player extends Character {
         this.slideDirection = Direction.Stop;
         this.turnDirection = Direction.Stop;
         app.paths.clear();
+    }
+
+    public void tick() {
+        if(this.hitCement)
+            this.cementMoving();
+        else
+            this.soilMoving();
     }
 }
