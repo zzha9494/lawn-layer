@@ -31,6 +31,7 @@ public class App extends PApplet {
 
     public boolean gameOver;
     public int currentLevel;
+    public double goal;
     public int maxLevel;
 
     public ArrayList<Cement> cementTiles;
@@ -70,6 +71,7 @@ public class App extends PApplet {
         this.red = loadImage(this.getClass().getResource("red.png").getPath());
 
         this.currentLevel = 0;
+        this.goal = 0;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
 
         // create cement tiles
@@ -161,6 +163,7 @@ public class App extends PApplet {
 //        System.out.println(this.player.lives);
 //        System.out.println(this.grasses.size());
 //        System.out.println(this.player.centerCement +" "+this.player.centerGrass);
+        System.out.println(this.goal);
 
     }
 
@@ -212,10 +215,11 @@ public class App extends PApplet {
         }
     }
 
-    public ArrayList<Cement> createCement(App this) {
+    public ArrayList<Cement> createCement() {
         ArrayList<Cement> cementTiles = new ArrayList<Cement>();
 
         JSONArray levels = this.loadJSONObject(this.configPath).getJSONArray("levels");
+        this.goal = levels.getJSONObject(this.currentLevel).getDouble("goal");
         boolean[][] grid = readMap(levels.getJSONObject(this.currentLevel).getString("outlay"));
 
         this.checkMapValid(grid);
