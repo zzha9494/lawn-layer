@@ -8,19 +8,18 @@ public class Player extends Character {
     public int lives;
     public boolean alive;
 
-    public Direction leftRightDirection;
-    public Direction upDownDirection;
-    public Direction slideDirection;
-    public Direction turnDirection;
+    public boolean centerCement;
+    public boolean centerGrass;
+    public boolean hitCement;
 
     public boolean leftMoving;
     public boolean rightMoving;
     public boolean upMoving;
     public boolean downMoving;
-
-    public boolean centerCement;
-    public boolean centerGrass;
-    public boolean hitCement;
+    public Direction leftRightDirection;
+    public Direction upDownDirection;
+    public Direction slideDirection;
+    public Direction turnDirection;
 
     public ArrayList<Tile> floodArea;
 
