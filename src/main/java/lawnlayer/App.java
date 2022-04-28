@@ -380,7 +380,7 @@ public class App extends PApplet {
         fill(0);
         if (!this.gameOver && !this.gameWin) {
             text(lives,20,40);
-            text(progress,1140,40);
+            text(progress,1130,40);
             textFont(f, 24);
             text(level,1190,70);
 
