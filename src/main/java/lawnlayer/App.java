@@ -86,7 +86,7 @@ public class App extends PApplet {
         this.powerup_0 = loadImage(this.getClass().getResource("powerup_0.png").getPath());
         this.powerup_1 = loadImage(this.getClass().getResource("powerup_1.png").getPath());
 
-        this.currentLevel = 1;
+        this.currentLevel = 0;
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
 
         // create cement tiles
