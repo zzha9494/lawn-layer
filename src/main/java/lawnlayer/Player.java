@@ -249,10 +249,8 @@ public class Player extends Character {
 
     public void playerRespawn(App app) {
         this.lives --;
-        if (this.lives == 0) {
-            app.gameOver = true;
+        if (this.lives == 0)
             return;
-        }
 
         try {
             Thread.sleep(1000);

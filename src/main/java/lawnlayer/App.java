@@ -1,6 +1,7 @@
 package lawnlayer;
 
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -30,10 +31,13 @@ public class App extends PApplet {
     public PImage red;
     public PImage powerup_0;
     public PImage powerup_1;
+    public PFont f;
 
     public boolean gameOver;
+    public boolean gameWin;
     public int currentLevel;
     public double goal;
+    public double progress;
     public int maxLevel;
 
     public ArrayList<Cement> cementTiles;
@@ -69,6 +73,7 @@ public class App extends PApplet {
     */
     public void setup() {
         frameRate(FPS);
+        f = createFont("Times New Roman",36,true);
 
         // Load images during setup
 		this.grass = loadImage(this.getClass().getResource("grass.png").getPath());
@@ -105,11 +110,8 @@ public class App extends PApplet {
     public void draw() {
         background(244, 164, 96); // Sandy Brown
 
-        if (this.gameOver)
-            System.out.println("gameover");
-
-        //tick
-        if (!this.gameOver) {
+        if (!this.gameOver && !this.gameWin) {
+            //tick
             this.propagateTimerIncrease();
             this.powerupEvent();
 
@@ -128,29 +130,31 @@ public class App extends PApplet {
 
             for (Path path: this.currentRed)
                 path.propagateRed(this);
+
+            // draw
+            for (Cement cement: this.cementTiles)
+                cement.draw(this);
+
+            for (Grass grass: this.grasses)
+                grass.draw(this);
+
+            for (Path path: this.paths)
+                path.draw(this);
+
+            this.player.draw(this);
+
+            for (Enemy enemy: this.enemies)
+                enemy.draw(this);
+
+            if (this.unCollectedPowerup != null)
+                this.unCollectedPowerup.draw(this);
+
+            if (this.collectedPowerup != null)
+                this.collectedPowerup.draw(this);
         }
 
-        // draw
-        for (Cement cement: this.cementTiles)
-            cement.draw(this);
-
-        for (Grass grass: this.grasses)
-            grass.draw(this);
-
-        for (Path path: this.paths)
-            path.draw(this);
-
-        this.player.draw(this);
-
-        for (Enemy enemy: this.enemies)
-            enemy.draw(this);
-
-        if (this.unCollectedPowerup != null)
-            this.unCollectedPowerup.draw(this);
-
-        if (this.collectedPowerup != null)
-            this.collectedPowerup.draw(this);
-
+        this.winConditionCheck();
+        this.showText();
 
         // test
 //        System.out.println(this.enemies.get(0).x + ", "+ this.enemies.get(0).y);
@@ -189,6 +193,7 @@ public class App extends PApplet {
 //        System.out.println(this.unCollectedPowerup == null);
 //        if (this.collectedPowerup != null)
 //            System.out.println(this.collectedPowerup.type + " "+ this.powerupDurationTimer);
+//        System.out.println(this.grasses.size());
 
     }
 
@@ -223,6 +228,12 @@ public class App extends PApplet {
             if(this.player.slideDirection == Direction.Left || this.player.slideDirection == Direction.Right)
                 this.player.turnDirection = Direction.Down;
         }
+
+        if (this.keyCode == 80 && (this.gameOver || this.gameWin)) {
+            this.gameOver = false;
+            this.gameWin = false;
+            this.setup();
+        }
     }
 
     public void keyReleased() {
@@ -244,7 +255,7 @@ public class App extends PApplet {
         ArrayList<Cement> cementTiles = new ArrayList<Cement>();
 
         JSONArray levels = this.loadJSONObject(this.configPath).getJSONArray("levels");
-        this.goal = levels.getJSONObject(this.currentLevel).getDouble("goal");
+        this.goal = 100 * levels.getJSONObject(this.currentLevel).getDouble("goal");
         boolean[][] grid = readMap(levels.getJSONObject(this.currentLevel).getString("outlay"));
 
         this.checkMapValid(grid);
@@ -354,9 +365,9 @@ public class App extends PApplet {
     }
 
     public void powerupEvent() {
-        // 5-10s get interval
+        // 5-8s get interval
         if (this.randomInterval == 0)
-            this.randomInterval = 300 + (int)(Math.random()*300);
+            this.randomInterval = 300 + (int)(Math.random()*180);
 
         if (this.unCollectedPowerup == null)
             this.powerupSpawnTimer++;
@@ -389,6 +400,67 @@ public class App extends PApplet {
         return redPaths;
     }
 
+    public void showText() {
+        textFont(f);
+        fill(0);
+
+        String lives = "Lives: " + this.player.lives;
+        String progress = (int)this.progress + "%/" + (int)(this.goal) + "%";
+        String level = "Level " + this.currentLevel;
+        String remainingTime = "Remaining Time: " + (100 - this.powerupDurationTimer/6)/10.0;
+        String power0 = "IT IS YOUR TIME!!!";
+        String power1 = "Catch Me If You Can!";
+        String win = "YOU WIN!";
+        String over = "GAME OVER";
+        String restart = "Press P Restart";
+
+        if (!this.gameOver && !this.gameWin) {
+            text(lives,20,40);
+            text(progress,1140,40);
+            textFont(f, 24);
+            text(level,1190,70);
+
+            if (this.collectedPowerup != null) {
+                text(remainingTime,50,70);
+                if (this.collectedPowerup.type == 0)
+                    text(power0,300,70);
+                if (this.collectedPowerup.type == 1)
+                    text(power1,300,70);
+            }
+        }
+        else {
+            fill(255);
+            textFont(f, 36);
+            text(restart,520,400);
+            textFont(f, 72);
+            if(this.gameWin)
+                text(win,460,360);
+            else if(this.gameOver)
+                text(over,420,360);
+        }
+    }
+
+    public void winConditionCheck() {
+        this.progress = Math.round(100 * (float)this.grasses.size() / (32*64 - this.cementTiles.size()));
+
+        if (this.player.lives == 0 && !this.gameOver) {
+            this.gameOver = true;
+            System.out.println("over");
+        }
+
+        if (this.progress >= this.goal && !this.gameWin) {
+            if (this.currentLevel >= this.maxLevel) {
+                this.gameWin = true;
+                System.out.println("win");
+                return;
+            }
+            this.player.moveOrigin(this);
+            this.enemies = this.createEnemies();
+            this.cementTiles = this.createCement();
+            this.grasses.clear();
+            this.currentLevel++;
+        }
+    }
     public static void main(String[] args) {
         PApplet.main("lawnlayer.App");
     }

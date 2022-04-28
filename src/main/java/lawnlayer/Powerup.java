@@ -38,7 +38,7 @@ public class Powerup extends Tile implements Spawn {
             if (app.collectedPowerup != null)
                 app.collectedPowerup.invalidPowerup(app);
             this.x = 20;
-            this.y = 20;
+            this.y = 52;
             app.collectedPowerup = this;
             this.validPowerup(app);
             app.unCollectedPowerup = null;
