@@ -232,6 +232,7 @@ public class App extends PApplet {
         if (this.keyCode == 80 && (this.gameOver || this.gameWin)) {
             this.gameOver = false;
             this.gameWin = false;
+            this.player.moveOrigin(this);
             this.setup();
         }
     }
