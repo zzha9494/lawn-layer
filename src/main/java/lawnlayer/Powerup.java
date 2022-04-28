@@ -8,7 +8,7 @@ public class Powerup extends Tile implements Spawn {
     public Powerup(App app) {
         super(0, 0);
         this.randomSpawn(app);
-        this.type = app.randomInterval % 2;
+        this.type = app.randomInterval % 2; // modulo number of types
         this.sprite = this.chooseType(app);
     }
 
@@ -28,9 +28,9 @@ public class Powerup extends Tile implements Spawn {
     public PImage chooseType(App app) {
         if (this.type == 0)
             return app.powerup_0;
-        if (this.type == 1)
+        else
+//        if (this.type == 1) // register new type here
             return app.powerup_1;
-        return null;
     }
 
     public void checkCollected(App app) {

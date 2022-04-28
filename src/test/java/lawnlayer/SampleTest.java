@@ -12,12 +12,39 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SampleTest {
 
     @Test
-    public void testApp() {
+    // test collect powerup
+    public void testPowerup() {
         App app = new App();
 //        app.noLoop(); //optional
         PApplet.runSketch(new String[] {"App"}, app);
         app.setup();
         app.delay(1000); //to give time to initialise stuff before drawing begins
+
+        app.unCollectedPowerup = new Powerup(app);
+        app.randomInterval = 1001;
+
+        app.player.x = app.unCollectedPowerup.x;
+        app.player.y = app.unCollectedPowerup.y;
+        app.unCollectedPowerup.checkCollected(app);
+        assertNull(app.unCollectedPowerup);
+        assertNotNull(app.collectedPowerup);
+
+        app.unCollectedPowerup = new Powerup(app);
+        app.randomInterval = 1000;
+        app.player.x = app.unCollectedPowerup.x;
+        app.player.y = app.unCollectedPowerup.y;
+        app.unCollectedPowerup.checkCollected(app);
+
+        app.unCollectedPowerup = new Powerup(app);
+        app.player.x = app.unCollectedPowerup.x;
+        app.player.y = app.unCollectedPowerup.y;
+        app.unCollectedPowerup.checkCollected(app);
+
+        app.unCollectedPowerup = new Powerup(app);
+        app.grasses.add(new Grass(app.unCollectedPowerup.x, app.unCollectedPowerup.y, null));
+        app.unCollectedPowerup.checkCollected(app);
+        assertNull(app.unCollectedPowerup);
+        app.grasses.clear();
     }
 
     @Test
@@ -97,5 +124,15 @@ public class SampleTest {
         assertTrue(p1.checkCollide(p2));
         assertTrue(p.checkInRegion(app.paths));
         assertFalse(e.checkInRegion(app.paths));
+    }
+
+    public void test() {
+        App app = new App();
+//        app.noLoop(); //optional
+        PApplet.runSketch(new String[] {"App"}, app);
+        app.setup();
+        app.delay(1000); //to give time to initialise stuff before drawing begins
+
+
     }
 }
