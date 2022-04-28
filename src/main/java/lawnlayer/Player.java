@@ -232,7 +232,7 @@ public class Player extends Character {
 
 
     public void checkLoseOneLife(App app) {
-        if(this.checkInRegion(app.enemies))
+        if(this.checkInRegion(app.enemies) && !this.centerCement)
             this.alive = false;
 
         if(this.checkInRegion(app.currentRed))

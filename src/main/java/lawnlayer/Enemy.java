@@ -43,8 +43,10 @@ public class Enemy extends Character implements Spawn {
 
     public void reflectDirection(App app) {
         ArrayList<Tile> clingTiles = this.getClingTiles(app);
-        if (clingTiles.size() == 0)
+        if (clingTiles.size() == 0 && (this.checkInRegion(app.grasses) || this.checkInRegion(app.cementTiles) || this.checkInRegion(app.paths))) {
+            this.turnBack();
             return;
+        }
 
         if (clingTiles.size() == 1) {
             Tile clingWhat = clingTiles.get(0);
@@ -53,19 +55,16 @@ public class Enemy extends Character implements Spawn {
                     this.diagonal = Direction.BottomRight;
                 else
                     this.diagonal = Direction.BottomLeft;
-
             if (this.x == clingWhat.x && this.y + 20 == clingWhat.y)
                 if (this.diagonal == Direction.BottomRight)
                     this.diagonal = Direction.TopRight;
                 else
                     this.diagonal = Direction.TopLeft;
-
             if (this.x == clingWhat.x + 20 && this.y == clingWhat.y)
                 if (this.diagonal == Direction.TopLeft)
                     this.diagonal = Direction.TopRight;
                 else
                     this.diagonal = Direction.BottomRight;
-
             if (this.x + 20 == clingWhat.x && this.y == clingWhat.y)
                 if (this.diagonal == Direction.TopRight)
                     this.diagonal = Direction.TopLeft;
@@ -73,16 +72,19 @@ public class Enemy extends Character implements Spawn {
                     this.diagonal = Direction.BottomLeft;
         }
 
-        if (clingTiles.size() == 2) {
-            if (this.diagonal == Direction.TopRight)
-                this.diagonal = Direction.BottomLeft;
-            else if (this.diagonal == Direction.TopLeft)
-                this.diagonal = Direction.BottomRight;
-            else if (this.diagonal == Direction.BottomLeft)
-                this.diagonal = Direction.TopRight;
-            else if (this.diagonal == Direction.BottomRight)
-                this.diagonal = Direction.TopLeft;
-        }
+        if (clingTiles.size() == 2)
+            this.turnBack();
+    }
+
+    public void turnBack() {
+        if (this.diagonal == Direction.TopRight)
+            this.diagonal = Direction.BottomLeft;
+        else if (this.diagonal == Direction.TopLeft)
+            this.diagonal = Direction.BottomRight;
+        else if (this.diagonal == Direction.BottomLeft)
+            this.diagonal = Direction.TopRight;
+        else if (this.diagonal == Direction.BottomRight)
+            this.diagonal = Direction.TopLeft;
     }
 
     public ArrayList<Tile> getClingTiles(App app) {
@@ -108,7 +110,14 @@ public class Enemy extends Character implements Spawn {
 
     public void destroyGrass(App app) {
         // throw ConcurrentModificationException using for-each
-        app.grasses.removeIf(grass -> this.checkCling(grass) || this.checkCollide(grass));
+//        app.grasses.removeIf(grass -> this.checkCling(grass) || this.checkCollide(grass));
+        for (Grass grass: app.grasses)
+            if (this.checkCling(grass) || this.checkCollide(grass)) {
+                app.grasses.remove(grass);
+                // only remove one
+                return;
+            }
+
     }
 
     public void tick() {
