@@ -31,14 +31,20 @@ public class App extends PApplet {
     public PImage red;
     public PImage powerup_0;
     public PImage powerup_1;
+
     public PFont f;
 
     public boolean gameOver;
     public boolean gameWin;
-    public int currentLevel;
-    public double goal;
     public double progress;
+    public double goal;
+    public int currentLevel;
     public int maxLevel;
+    public int propagationSpeed;
+    public int propagateTimer;
+    public int powerupSpawnTimer;
+    public int powerupDurationTimer;
+    public int randomInterval;
 
     public ArrayList<Cement> cementTiles;
     public ArrayList<Grass> grasses;
@@ -50,12 +56,6 @@ public class App extends PApplet {
 
     public Powerup collectedPowerup;
     public Powerup unCollectedPowerup;
-
-    public int propagateTimer;
-    public int powerupDurationTimer;
-    public int powerupSpawnTimer;
-    public int randomInterval;
-    public int propagationSpeed;
 
     public App() {
         this.configPath = "config.json";
@@ -88,7 +88,7 @@ public class App extends PApplet {
         this.powerup_0 = loadImage(this.getClass().getResource("powerup_0.png").getPath());
         this.powerup_1 = loadImage(this.getClass().getResource("powerup_1.png").getPath());
 
-        this.currentLevel = 0;
+        this.currentLevel = 0; // jump level if you like
         this.maxLevel = this.loadJSONObject(this.configPath).getJSONArray("levels").size();
 
         // create cement tiles
@@ -187,6 +187,7 @@ public class App extends PApplet {
         if (this.keyCode == 40) {
             this.player.downMoving = true;
             this.player.upDownDirection = Direction.Down;
+
             if(this.player.slideDirection == Direction.Left || this.player.slideDirection == Direction.Right)
                 this.player.turnDirection = Direction.Down;
         }
@@ -221,6 +222,7 @@ public class App extends PApplet {
         this.goal = 100 * levels.getJSONObject(this.currentLevel).getDouble("goal");
         boolean[][] grid = readMap(levels.getJSONObject(this.currentLevel).getString("outlay"));
 
+        // throw error here
         this.checkMapValid(grid);
 
         for (int row = 0; row < grid.length; row++)
@@ -364,9 +366,6 @@ public class App extends PApplet {
     }
 
     public void showText() {
-        textFont(f);
-        fill(0);
-
         String lives = "Lives: " + this.player.lives;
         String progress = (int)this.progress + "%/" + (int)(this.goal) + "%";
         String level = "Level " + this.currentLevel;
@@ -377,6 +376,8 @@ public class App extends PApplet {
         String over = "GAME OVER";
         String restart = "Press P Restart";
 
+        textFont(f);
+        fill(0);
         if (!this.gameOver && !this.gameWin) {
             text(lives,20,40);
             text(progress,1140,40);
@@ -396,9 +397,9 @@ public class App extends PApplet {
             textFont(f, 36);
             text(restart,520,400);
             textFont(f, 72);
-            if(this.gameWin)
+            if (this.gameWin)
                 text(win,460,360);
-            else if(this.gameOver)
+            else if (this.gameOver)
                 text(over,420,360);
         }
     }
