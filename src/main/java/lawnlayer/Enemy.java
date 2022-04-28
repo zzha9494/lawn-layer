@@ -5,20 +5,22 @@ import processing.core.PImage;
 import java.util.ArrayList;
 
 public class Enemy extends Character implements Spawn {
-    public Direction diagonal;
+
     public int speed;
     public int type;
     public boolean isFrozen;
+    public Direction diagonal;
 
     public Enemy(int x, int y, PImage sprite) {
         super(x, y, sprite);
         this.diagonal = this.initialDiagonal();
-        type = 0;
         speed = 2;
+        type = 0;
     }
 
     public Direction initialDiagonal() {
         int i = (int)(Math.random()*4);
+
         if (i == 0)
             return Direction.TopLeft;
         if (i == 1)
@@ -117,7 +119,6 @@ public class Enemy extends Character implements Spawn {
                 // only remove one
                 return;
             }
-
     }
 
     public void tick() {
@@ -137,7 +138,6 @@ public class Enemy extends Character implements Spawn {
             this.x += this.speed;
             this.y += this.speed;
         }
-
     }
 
 }
