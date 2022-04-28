@@ -20,8 +20,9 @@ public class SampleTest {
         app.setup();
         app.delay(1000); //to give time to initialise stuff before drawing begins
 
+        app.randomInterval = 1000;
         app.unCollectedPowerup = new Powerup(app);
-        app.randomInterval = 1001;
+        assertEquals(app.unCollectedPowerup.type, 0);
 
         app.player.x = app.unCollectedPowerup.x;
         app.player.y = app.unCollectedPowerup.y;
@@ -29,13 +30,15 @@ public class SampleTest {
         assertNull(app.unCollectedPowerup);
         assertNotNull(app.collectedPowerup);
 
+        app.randomInterval = 1001;
         app.unCollectedPowerup = new Powerup(app);
-        app.randomInterval = 1000;
+        assertEquals(app.unCollectedPowerup.type, 1);
         app.player.x = app.unCollectedPowerup.x;
         app.player.y = app.unCollectedPowerup.y;
         app.unCollectedPowerup.checkCollected(app);
 
         app.unCollectedPowerup = new Powerup(app);
+        app.unCollectedPowerup.type = 0;
         app.player.x = app.unCollectedPowerup.x;
         app.player.y = app.unCollectedPowerup.y;
         app.unCollectedPowerup.checkCollected(app);
@@ -44,6 +47,12 @@ public class SampleTest {
         app.grasses.add(new Grass(app.unCollectedPowerup.x, app.unCollectedPowerup.y, null));
         app.unCollectedPowerup.checkCollected(app);
         assertNull(app.unCollectedPowerup);
+        app.grasses.clear();
+
+            for (int i = 0; i < 64; i++)
+                for (int j = 0; j< 32; j++)
+                    app.grasses.add(new Grass(20*i, 20*j, null));
+        Powerup P = new Powerup(app);
         app.grasses.clear();
     }
 
