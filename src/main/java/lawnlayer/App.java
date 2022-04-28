@@ -155,46 +155,6 @@ public class App extends PApplet {
 
         this.winConditionCheck();
         this.showText();
-
-        // test
-//        System.out.println(this.enemies.get(0).x + ", "+ this.enemies.get(0).y);
-//        for (Cement cement: this.cementTiles)
-//            if (this.player.checkCling(cement))
-//                System.out.println("yes");
-//        System.out.println(this.player.slideDirection + " "+ this.player.upDownDirection+ " "+this.player.x+" "+this.player.y);
-//        System.out.println(this.player.onCement+ " "+this.player.centerCement+" "+this.player.soilSlideDirection + this.player.x);
-//        System.out.println(this.player.x+ " "+this.player.y);
-//        System.out.println(this.grasses.size());
-//        System.out.println(this.player.existsTile(this, 0, 100));
-//        if (this.paths.size() != 0)
-//            this.player.floodFill(this, this.paths.get(0));
-//        System.out.println(this.grasses.size());
-//        System.out.println(timer);
-//        for (Path path: this.paths)
-//            if(path.isRed)
-//                System.out.println("1");
-//        int temp = 0;
-//        for (Path path: this.paths) {
-//            if(path.isRed)
-//                temp++;
-//        }
-//        System.out.println(temp);
-//        System.out.println(this.grasses.size());
-//        System.out.println(this.player.loseOneLife(this));
-//        System.out.println(this.player.lives);
-//        System.out.println(this.grasses.size());
-//        System.out.println(this.player.centerCement +" "+this.player.centerGrass);
-//        System.out.println(this.goal);
-//        if (this.powerupTimer % 60 == 0)
-//            System.out.println(this.powerupTimer);
-//        System.out.println(this.randomInterval + " "+this.powerupTimer);
-//        System.out.println(this.player.duringPowerup);
-//        System.out.println(this.powerSpawnTimer);
-//        System.out.println(this.unCollectedPowerup == null);
-//        if (this.collectedPowerup != null)
-//            System.out.println(this.collectedPowerup.type + " "+ this.powerupDurationTimer);
-//        System.out.println(this.grasses.size());
-
     }
 
     public void keyPressed() {
