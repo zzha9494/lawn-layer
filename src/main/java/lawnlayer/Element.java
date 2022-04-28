@@ -22,7 +22,6 @@ interface Spawn {
 }
 
 public class Element {
-
     protected int x;
     protected int y;
     protected PImage sprite;

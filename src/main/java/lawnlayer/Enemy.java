@@ -5,7 +5,6 @@ import processing.core.PImage;
 import java.util.ArrayList;
 
 public class Enemy extends Character implements Spawn {
-
     public int speed;
     public int type;
     public boolean isFrozen;
