@@ -56,6 +56,7 @@ public class SampleTest {
                 for (int j = 0; j< 32; j++)
                     app.grasses.add(new Grass(20*i, 20*j, null));
         app.unCollectedPowerup = new Powerup(app);
+        app.enemies.get(0).randomSpawn(app);
         app.grasses.clear();
     }
 
@@ -144,6 +145,7 @@ public class SampleTest {
         PApplet.runSketch(new String[] {"App"}, app);
         app.setup();
         app.delay(1000); //to give time to initialise stuff before drawing begins
+
 
 
     }
