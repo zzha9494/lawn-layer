@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SampleTest {
 
     @Test
-    // test collect powerup
+    // test collect powerup, spawn, valid and invalid
     public void testPowerup() {
         App app = new App();
 //        app.noLoop(); //optional
@@ -27,6 +27,7 @@ public class SampleTest {
         app.player.x = app.unCollectedPowerup.x;
         app.player.y = app.unCollectedPowerup.y;
         app.unCollectedPowerup.checkCollected(app);
+        assertTrue(app.enemies.get(0).isFrozen);
         assertNull(app.unCollectedPowerup);
         assertNotNull(app.collectedPowerup);
 
@@ -36,12 +37,14 @@ public class SampleTest {
         app.player.x = app.unCollectedPowerup.x;
         app.player.y = app.unCollectedPowerup.y;
         app.unCollectedPowerup.checkCollected(app);
+        assertEquals(app.propagationSpeed, 6);
 
         app.unCollectedPowerup = new Powerup(app);
         app.unCollectedPowerup.type = 0;
         app.player.x = app.unCollectedPowerup.x;
         app.player.y = app.unCollectedPowerup.y;
         app.unCollectedPowerup.checkCollected(app);
+        assertEquals(app.propagationSpeed, 3);
 
         app.unCollectedPowerup = new Powerup(app);
         app.grasses.add(new Grass(app.unCollectedPowerup.x, app.unCollectedPowerup.y, null));
@@ -52,7 +55,7 @@ public class SampleTest {
             for (int i = 0; i < 64; i++)
                 for (int j = 0; j< 32; j++)
                     app.grasses.add(new Grass(20*i, 20*j, null));
-        Powerup P = new Powerup(app);
+        app.unCollectedPowerup = new Powerup(app);
         app.grasses.clear();
     }
 
