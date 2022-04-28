@@ -5,9 +5,9 @@ import processing.core.PImage;
 import java.util.ArrayList;
 
 public class Player extends Character {
+    public int speed;
     public int lives;
     public boolean alive;
-    public int speed;
 
     public boolean centerCement;
     public boolean centerGrass;

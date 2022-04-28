@@ -10,6 +10,6 @@ public class Tile extends Element{
 
     public Tile(int x, int y, PImage sprite) {
         super(x, y, sprite);
-
     }
+
 }
