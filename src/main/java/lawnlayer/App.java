@@ -60,7 +60,7 @@ public class App extends PApplet {
     public App() {
         this.configPath = "config.json";
 //        this.configPath = "config_invalidmap.json";
-//        this.configPath = "config_not_random_spawn.json";
+//        this.configPath = "config_no_random_spawn_99lives_1level.json";
     }
 
     /**
