@@ -12,13 +12,121 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SampleTest {
 
     @Test
+    public void testPlayer() {
+        App app = new App();
+        app.noLoop(); //optional
+        PApplet.runSketch(new String[] {"App"}, app);
+        app.setup();
+        app.delay(1000);
+
+
+    }
+
+    @Test
+    // reflection, destroy grass, turn back
+    public void testEnemy() {
+        App app = new App();
+        app.noLoop(); //optional
+        PApplet.runSketch(new String[] {"App"}, app);
+        app.setup();
+        app.delay(1000);
+
+        // destroy grasses
+        assertEquals(0, app.grasses.size());
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j< 3; j++)
+                app.grasses.add(new Grass(20*i, 20*j, null));
+        assertEquals(9, app.grasses.size());
+        Bettle bettle = new Bettle(20, 20, null);
+        for (int i = 0; i < 6; i++)
+            bettle.destroyGrass(app);
+        assertEquals(4, app.grasses.size());
+
+        // reflect convex, turn back
+        bettle.diagonal = Direction.TopLeft;
+        bettle.tick();
+        assertEquals(18, bettle.x);
+        assertEquals(Direction.TopLeft, bettle.diagonal);
+        bettle.reflectDirection(app);
+        assertEquals(Direction.BottomRight, bettle.diagonal);
+        bettle.tick();
+        bettle.tick();
+        bettle.reflectDirection(app);
+        assertEquals(Direction.TopLeft, bettle.diagonal);
+        bettle.tick();
+        assertEquals(20, bettle.y);
+
+        bettle.diagonal = Direction.TopRight;
+        bettle.tick();
+        bettle.reflectDirection(app);
+        assertEquals(Direction.BottomLeft, bettle.diagonal);
+        bettle.tick();
+        bettle.tick();
+        bettle.reflectDirection(app);
+        assertEquals(Direction.TopRight, bettle.diagonal);
+        bettle.tick();
+        assertEquals(20, bettle.y);
+
+        // get cling tiles, reflect concave
+        app.grasses.clear();
+        app.paths.add(new Path(20, 0, null));
+        app.cementTiles.add(new Cement(0, 20, null));
+        app.grasses.add(new Grass(20, 40, null));
+
+        ArrayList<Tile> clingTiles = bettle.getClingTiles(app);
+        assertEquals(3, clingTiles.size());
+        bettle.destroyGrass(app);
+        bettle.diagonal = Direction.TopLeft;
+        bettle.reflectDirection(app);
+        assertEquals(Direction.BottomRight, bettle.diagonal);
+        assertTrue(app.paths.get(0).isRed);
+        app.paths.clear();
+        app.cementTiles.clear();
+
+        // reflect plain
+        app.cementTiles.add(new Cement(20, 0, null));
+        bettle.diagonal = Direction.TopLeft;
+        bettle.reflectDirection(app);
+        assertEquals(Direction.BottomLeft, bettle.diagonal);
+        bettle.diagonal = Direction.TopRight;
+        bettle.reflectDirection(app);
+        assertEquals(Direction.BottomRight, bettle.diagonal);
+        app.cementTiles.clear();
+
+        app.cementTiles.add(new Cement(40, 20, null));
+        bettle.reflectDirection(app);
+        assertEquals(Direction.BottomLeft, bettle.diagonal);
+        bettle.diagonal = Direction.TopRight;
+        bettle.reflectDirection(app);
+        assertEquals(Direction.TopLeft, bettle.diagonal);
+        app.cementTiles.clear();
+
+        app.cementTiles.add(new Cement(0, 20, null));
+        bettle.diagonal = Direction.TopLeft;
+        bettle.reflectDirection(app);
+        assertEquals(Direction.TopRight, bettle.diagonal);
+        bettle.diagonal = Direction.BottomLeft;
+        bettle.reflectDirection(app);
+        assertEquals(Direction.BottomRight, bettle.diagonal);
+        app.cementTiles.clear();
+
+        app.cementTiles.add(new Cement(20, 40, null));
+        bettle.diagonal = Direction.BottomLeft;
+        bettle.reflectDirection(app);
+        bettle.diagonal = Direction.TopLeft;
+        bettle.diagonal = Direction.BottomRight;
+        bettle.reflectDirection(app);
+        bettle.diagonal = Direction.TopRight;
+    }
+
+    @Test
     // test collect powerup, spawn, valid and invalid
     public void testPowerup() {
         App app = new App();
         app.noLoop(); //optional
         PApplet.runSketch(new String[] {"App"}, app);
         app.setup();
-        app.delay(1000); //to give time to initialise stuff before drawing begins
+        app.delay(1000);
 
         app.randomInterval = 1000;
         app.unCollectedPowerup = new Powerup(app);
@@ -137,101 +245,5 @@ public class SampleTest {
         assertTrue(p1.checkCollide(p2));
         assertTrue(p.checkInRegion(app.paths));
         assertFalse(e.checkInRegion(app.paths));
-    }
-
-    @Test
-    public void test() {
-        App app = new App();
-        app.noLoop(); //optional
-        PApplet.runSketch(new String[] {"App"}, app);
-        app.setup();
-        app.delay(1000); //to give time to initialise stuff before drawing begins
-
-        // destroy grasses
-        assertEquals(0, app.grasses.size());
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j< 3; j++)
-                app.grasses.add(new Grass(20*i, 20*j, null));
-        assertEquals(9, app.grasses.size());
-        Bettle bettle = new Bettle(20, 20, null);
-        for (int i = 0; i < 6; i++)
-            bettle.destroyGrass(app);
-        assertEquals(4, app.grasses.size());
-
-        // reflect convex, turn back
-        bettle.diagonal = Direction.TopLeft;
-        bettle.tick();
-        assertEquals(18, bettle.x);
-        assertEquals(Direction.TopLeft, bettle.diagonal);
-        bettle.reflectDirection(app);
-        assertEquals(Direction.BottomRight, bettle.diagonal);
-        bettle.tick();
-        bettle.tick();
-        bettle.reflectDirection(app);
-        assertEquals(Direction.TopLeft, bettle.diagonal);
-        bettle.tick();
-        assertEquals(20, bettle.y);
-
-        bettle.diagonal = Direction.TopRight;
-        bettle.tick();
-        bettle.reflectDirection(app);
-        assertEquals(Direction.BottomLeft, bettle.diagonal);
-        bettle.tick();
-        bettle.tick();
-        bettle.reflectDirection(app);
-        assertEquals(Direction.TopRight, bettle.diagonal);
-        bettle.tick();
-        assertEquals(20, bettle.y);
-
-        // get cling tiles, reflect concave
-        app.grasses.clear();
-        app.paths.add(new Path(20, 0, null));
-        app.cementTiles.add(new Cement(0, 20, null));
-        app.grasses.add(new Grass(20, 40, null));
-
-        ArrayList<Tile> clingTiles = bettle.getClingTiles(app);
-        assertEquals(3, clingTiles.size());
-        bettle.destroyGrass(app);
-        bettle.diagonal = Direction.TopLeft;
-        bettle.reflectDirection(app);
-        assertEquals(Direction.BottomRight, bettle.diagonal);
-        assertTrue(app.paths.get(0).isRed);
-        app.paths.clear();
-        app.cementTiles.clear();
-
-        // reflect plain
-        app.cementTiles.add(new Cement(20, 0, null));
-        bettle.diagonal = Direction.TopLeft;
-        bettle.reflectDirection(app);
-        assertEquals(Direction.BottomLeft, bettle.diagonal);
-        bettle.diagonal = Direction.TopRight;
-        bettle.reflectDirection(app);
-        assertEquals(Direction.BottomRight, bettle.diagonal);
-        app.cementTiles.clear();
-
-        app.cementTiles.add(new Cement(40, 20, null));
-        bettle.reflectDirection(app);
-        assertEquals(Direction.BottomLeft, bettle.diagonal);
-        bettle.diagonal = Direction.TopRight;
-        bettle.reflectDirection(app);
-        assertEquals(Direction.TopLeft, bettle.diagonal);
-        app.cementTiles.clear();
-
-        app.cementTiles.add(new Cement(0, 20, null));
-        bettle.diagonal = Direction.TopLeft;
-        bettle.reflectDirection(app);
-        assertEquals(Direction.TopRight, bettle.diagonal);
-        bettle.diagonal = Direction.BottomLeft;
-        bettle.reflectDirection(app);
-        assertEquals(Direction.BottomRight, bettle.diagonal);
-        app.cementTiles.clear();
-
-        app.cementTiles.add(new Cement(20, 40, null));
-        bettle.diagonal = Direction.BottomLeft;
-        bettle.reflectDirection(app);
-        bettle.diagonal = Direction.TopLeft;
-        bettle.diagonal = Direction.BottomRight;
-        bettle.reflectDirection(app);
-        bettle.diagonal = Direction.TopRight;
     }
 }
