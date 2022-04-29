@@ -27,7 +27,7 @@
         },
         {
           "type": 1,
-          "spawn": "random"
+          "spawn": "10,23"
         }
       ],
       "goal": 0.8

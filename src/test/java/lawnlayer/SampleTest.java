@@ -1,11 +1,8 @@
 package lawnlayer;
 
 
-import org.checkerframework.checker.units.qual.A;
 import processing.core.PApplet;
 import org.junit.jupiter.api.Test;
-import processing.core.PImage;
-import processing.event.Event;
 import processing.event.KeyEvent;
 
 import java.util.ArrayList;
@@ -22,6 +19,45 @@ public class SampleTest {
         app.setup();
         app.delay(1000);
 
+//        KeyEvent k = new KeyEvent(null, 1000, KeyEvent.PRESS, 0, '\uffff', 37);
+        app.player.slideDirection = Direction.Down;
+        app.keyCode = 37;
+        assertFalse(app.player.leftMoving);
+        app.keyPressed();
+        assertTrue(app.player.leftMoving);
+        assertEquals(Direction.Left, app.player.turnDirection);
+        app.player.slideTurnDirection();
+        app.keyReleased();
+        assertFalse(app.player.leftMoving);
+
+        app.keyCode = 38;
+        assertFalse(app.player.upMoving);
+        app.keyPressed();
+        assertTrue(app.player.upMoving);
+        assertEquals(Direction.Up, app.player.turnDirection);
+        app.player.slideTurnDirection();
+        app.keyReleased();
+        assertFalse(app.player.upMoving);
+
+        app.keyCode = 39;
+        assertFalse(app.player.rightMoving);
+        app.keyPressed();
+        assertTrue(app.player.rightMoving);
+        assertEquals(Direction.Right, app.player.turnDirection);
+        app.player.slideTurnDirection();
+        app.keyReleased();
+        assertFalse(app.player.rightMoving);
+
+        app.keyCode = 40;
+        assertFalse(app.player.downMoving);
+        app.keyPressed();
+        assertTrue(app.player.downMoving);
+        assertEquals(Direction.Down, app.player.turnDirection);
+        app.player.slideTurnDirection();
+        app.keyReleased();
+        assertFalse(app.player.downMoving);
+
+        // win, over check
         app.currentLevel = 1;
         assertFalse(app.gameWin);
 
@@ -31,6 +67,10 @@ public class SampleTest {
         assertTrue(app.gameOver);
         app.showText();
 
+        app.keyCode = 80;
+        app.keyPressed();
+        assertFalse(app.gameOver);
+
         int a = (int)Math.round((32*64 - app.cementTiles.size()) * app.goal/100);
         for (int i = 0; i < a; i++)
             app.grasses.add(new Grass(0, 0, app.grass));
@@ -39,6 +79,7 @@ public class SampleTest {
         int b = (int)Math.round((32*64 - app.cementTiles.size()) * app.goal/100);
         for (int i = 0; i < a; i++)
             app.grasses.add(new Grass(0, 0, app.grass));
+        assertFalse(app.gameWin);
         app.winConditionCheck();
         assertTrue(app.gameWin);
         app.showText();
@@ -487,10 +528,10 @@ public class SampleTest {
         app.randomInterval = 1001;
         app.unCollectedPowerup = new Powerup(app);
         assertEquals(1, app.unCollectedPowerup.type);
-        app.showText();
         app.player.x = app.unCollectedPowerup.x;
         app.player.y = app.unCollectedPowerup.y;
         app.unCollectedPowerup.checkCollected(app);
+        app.showText();
         assertEquals(6, app.propagationSpeed);
 
         app.unCollectedPowerup = new Powerup(app);
