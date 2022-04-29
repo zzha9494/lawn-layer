@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleTest {
+
     @Test
     // win condition check
     public void testApp_2() {
@@ -633,4 +634,5 @@ public class SampleTest {
         assertTrue(p.checkInRegion(app.paths));
         assertFalse(e.checkInRegion(app.paths));
     }
+
 }
