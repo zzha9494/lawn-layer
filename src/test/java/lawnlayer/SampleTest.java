@@ -22,12 +22,26 @@ public class SampleTest {
         app.setup();
         app.delay(1000);
 
+        app.currentLevel = 1;
+        assertFalse(app.gameWin);
 
+        assertFalse(app.gameOver);
+        app.player.lives = 0;
+        app.winConditionCheck();
+        assertTrue(app.gameOver);
+        app.showText();
 
-
-
-
-
+        int a = (int)Math.round((32*64 - app.cementTiles.size()) * app.goal/100);
+        for (int i = 0; i < a; i++)
+            app.grasses.add(new Grass(0, 0, app.grass));
+        app.winConditionCheck();
+        assertEquals(2, app.currentLevel);
+        int b = (int)Math.round((32*64 - app.cementTiles.size()) * app.goal/100);
+        for (int i = 0; i < a; i++)
+            app.grasses.add(new Grass(0, 0, app.grass));
+        app.winConditionCheck();
+        assertTrue(app.gameWin);
+        app.showText();
     }
 
     @Test
@@ -468,10 +482,12 @@ public class SampleTest {
         assertTrue(app.enemies.get(0).isFrozen);
         assertNull(app.unCollectedPowerup);
         assertNotNull(app.collectedPowerup);
+        app.showText();
 
         app.randomInterval = 1001;
         app.unCollectedPowerup = new Powerup(app);
         assertEquals(1, app.unCollectedPowerup.type);
+        app.showText();
         app.player.x = app.unCollectedPowerup.x;
         app.player.y = app.unCollectedPowerup.y;
         app.unCollectedPowerup.checkCollected(app);
