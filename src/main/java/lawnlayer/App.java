@@ -290,10 +290,10 @@ public class App extends PApplet {
             JSONObject currentEnemy = enemiesConfig.getJSONObject(i);
             Enemy enemy;
 
-            if (currentEnemy.getInt("type") == 0)
-                enemy = new Enemy(0, 0, this.worm);
-            else if(currentEnemy.getInt("type") == 1)
+            if(currentEnemy.getInt("type") == 1)
                 enemy = new Bettle(0, 0, this.beetle);
+            else if (currentEnemy.getInt("type") == 0)
+                enemy = new Enemy(0, 0, this.worm);
             //can register new type enemy here
             else
                 enemy = new Enemy(0, 0, this.worm);
