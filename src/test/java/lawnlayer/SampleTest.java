@@ -1,15 +1,29 @@
 package lawnlayer;
 
 
+import org.checkerframework.checker.units.qual.A;
 import processing.core.PApplet;
 import org.junit.jupiter.api.Test;
 import processing.core.PImage;
+import processing.event.Event;
+import processing.event.KeyEvent;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleTest {
+    @Test
+    //
+    public void testApp() {
+        App app = new App();
+        app.noLoop(); //optional
+        PApplet.runSketch(new String[] {"App"}, app);
+        app.setup();
+        app.delay(1000);
+
+    }
+
     @Test
     // player moving
     public void testPlayer_3() {
@@ -19,25 +33,100 @@ public class SampleTest {
         app.setup();
         app.delay(1000);
 
-        // 5x5 cement grid with empty space
+        // 3x3 cement grid with empty space
         app.enemies.clear();
         app.cementTiles.clear();
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                app.cementTiles.add(new Cement(20*i, 80 + 20*j, null));
+        assertEquals(9, app.cementTiles.size());
+
+        // normal moving
+        app.player.leftRightDirection = Direction.Right;
+        app.player.tick();
+        assertEquals(Direction.Right, app.player.slideDirection);
+        for(int i = 0; i < 9; i++)
+            app.player.tick();
+        assertEquals(20, app.player.x);
+
+        app.player.leftRightDirection = Direction.Left;
+        app.player.tick();
+        assertEquals(Direction.Left, app.player.slideDirection);
+        for(int i = 0; i < 9; i++)
+            app.player.tick();
+        assertEquals(0, app.player.x);
+
+        app.player.upDownDirection = Direction.Down;
+        app.player.tick();
+        assertEquals(Direction.Down, app.player.slideDirection);
+        for(int i = 0; i < 9; i++)
+            app.player.tick();
+        assertEquals(100, app.player.y);
+
+        app.player.upDownDirection = Direction.Up;
+        app.player.tick();
+        assertEquals(Direction.Up, app.player.slideDirection);
+        for(int i = 0; i < 9; i++)
+            app.player.tick();
+        assertEquals(80, app.player.y);
+
+        // soil moving, turn back direction is constrained by key pressed see App.java
+        app.cementTiles.clear();
+        app.player.moveOrigin(app);
         for (int i = 0; i < 5; i++) {
-            app.cementTiles.add(new Cement(20*i, 0, null));
             app.cementTiles.add(new Cement(20*i, 80, null));
+            app.cementTiles.add(new Cement(20*i, 160, null));
         }
         for (int i = 0; i < 3; i++) {
-            app.cementTiles.add(new Cement(0, 20+ 20*i, null));
-            app.cementTiles.add(new Cement(80, 20+ 20*i, null));
+            app.cementTiles.add(new Cement(0, 100+ 20*i, null));
+            app.cementTiles.add(new Cement(80, 100+ 20*i, null));
         }
         assertEquals(16, app.cementTiles.size());
 
+        app.player.x = 40;
+        app.player.upDownDirection = Direction.Down;
+        for(int i = 0; i < 20; i++) {
+            app.player.tick();
+            app.player.updatePositionFlag(app);
+        }
+        assertEquals(120, app.player.y);
+        assertEquals(Direction.Down, app.player.slideDirection);
+        assertFalse(app.player.hitCement);
 
+        app.player.turnDirection = Direction.Up;
+        app.player.slideTurnDirection();
+        assertEquals(Direction.Up, app.player.slideDirection);
+        app.player.turnDirection = Direction.Down;
+        app.player.slideTurnDirection();
+        assertEquals(Direction.Down, app.player.slideDirection);
+        app.player.turnDirection = Direction.Right;
+        app.player.slideTurnDirection();
+        assertEquals(Direction.Right, app.player.slideDirection);
+        for(int i = 0; i < 20; i++) {
+            app.player.tick();
+            app.player.updatePositionFlag(app);
+        }
+        assertEquals(80, app.player.x);
 
-
-
+        app.player.moveOrigin(app);
+        app.player.x = 40;
+        app.player.y = 160;
+        app.player.upDownDirection = Direction.Up;
+        for(int i = 0; i < 20; i++) {
+            app.player.tick();
+            app.player.updatePositionFlag(app);
+        }
+        assertEquals(120, app.player.y);
+        assertEquals(Direction.Up, app.player.slideDirection);
+        app.player.turnDirection = Direction.Left;
+        app.player.slideTurnDirection();
+        assertEquals(Direction.Left, app.player.slideDirection);
+        for(int i = 0; i < 20; i++) {
+            app.player.tick();
+            app.player.updatePositionFlag(app);
+        }
+        assertEquals(0, app.player.x);
     }
-
 
     @Test
     // create paths, create grasses with and without enemy.
@@ -314,8 +403,8 @@ public class SampleTest {
         app.grasses.clear();
 
             for (int i = 0; i < 64; i++)
-                for (int j = 0; j< 32; j++)
-                    app.cementTiles.add(new Cement(20*i, 20*j, null));
+                for (int j = 0; j< 30; j++)
+                    app.cementTiles.add(new Cement(20*i, 80 + 20*j, null));
         app.unCollectedPowerup = new Powerup(app);
         app.enemies.get(0).randomSpawn(app);
         app.cementTiles.clear();
