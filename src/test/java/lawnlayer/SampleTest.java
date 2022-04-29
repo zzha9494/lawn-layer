@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleTest {
     @Test
-    //
+    // win condition check
     public void testApp_2() {
         App app = new App();
         app.noLoop(); //optional
@@ -515,6 +515,27 @@ public class SampleTest {
     }
 
     @Test
+    // paths can be propagated red and get cling path
+    public void testPath() {
+        App app = new App();
+        Path p = new Path(0, 0, null);
+        Path p2 = new Path(20, 0, null);
+        Path p3 = new Path(0, 20, null);
+        app.paths = new ArrayList<Path>();
+        app.paths.add(p);
+        app.paths.add(p2);
+        app.paths.add(p3);
+        p3.turnRed(app);
+        assertTrue(p3.isRed);
+
+        ArrayList<Path> willRed = p.getClingPaths(app, p);
+        assertEquals(1, willRed.size());
+
+        p.propagateRed(app);
+        assertTrue(p2.isRed);
+    }
+
+    @Test
     // constructor
     public void testTile() {
         Tile t1 = new Tile(0, 0);
@@ -554,27 +575,6 @@ public class SampleTest {
         tiles.add(new Tile(120, 0));
         assertTrue(c.existsTile(120, 0, tiles));
         assertFalse(c.existsTile(0, 0, tiles));
-    }
-
-    @Test
-    // paths can be propagated red and get cling path
-    public void testPath() {
-        App app = new App();
-        Path p = new Path(0, 0, null);
-        Path p2 = new Path(20, 0, null);
-        Path p3 = new Path(0, 20, null);
-        app.paths = new ArrayList<Path>();
-        app.paths.add(p);
-        app.paths.add(p2);
-        app.paths.add(p3);
-        p3.turnRed(app);
-        assertTrue(p3.isRed);
-
-        ArrayList<Path> willRed = p.getClingPaths(app, p);
-        assertEquals(1, willRed.size());
-
-        p.propagateRed(app);
-        assertTrue(p2.isRed);
     }
 
     @Test
