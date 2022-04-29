@@ -10,16 +10,169 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleTest {
-
     @Test
-    public void testPlayer() {
+    // player moving
+    public void testPlayer_3() {
         App app = new App();
         app.noLoop(); //optional
         PApplet.runSketch(new String[] {"App"}, app);
         app.setup();
         app.delay(1000);
 
+        // 5x5 cement grid with empty space
+        app.enemies.clear();
+        app.cementTiles.clear();
+        for (int i = 0; i < 5; i++) {
+            app.cementTiles.add(new Cement(20*i, 0, null));
+            app.cementTiles.add(new Cement(20*i, 80, null));
+        }
+        for (int i = 0; i < 3; i++) {
+            app.cementTiles.add(new Cement(0, 20+ 20*i, null));
+            app.cementTiles.add(new Cement(80, 20+ 20*i, null));
+        }
+        assertEquals(16, app.cementTiles.size());
 
+
+
+
+
+    }
+
+
+    @Test
+    // create paths, create grasses with and without enemy.
+    public void testPlayer_2() {
+        App app = new App();
+        app.noLoop(); //optional
+        PApplet.runSketch(new String[] {"App"}, app);
+        app.setup();
+        app.delay(1000);
+
+        // 5x5 cement grid with empty space
+        app.enemies.clear();
+        app.cementTiles.clear();
+        for (int i = 0; i < 5; i++) {
+            app.cementTiles.add(new Cement(20*i, 0, null));
+            app.cementTiles.add(new Cement(20*i, 80, null));
+        }
+        for (int i = 0; i < 3; i++) {
+            app.cementTiles.add(new Cement(0, 20+ 20*i, null));
+            app.cementTiles.add(new Cement(80, 20+ 20*i, null));
+        }
+        assertEquals(16, app.cementTiles.size());
+        app.enemies.add(new Bettle(60, 60, null));
+        assertEquals(1, app.enemies.size());
+        assertEquals(0, app.grasses.size());
+
+        app.player.x = 40;
+        app.player.y = 10;
+        app.player.updatePositionFlag(app);
+        app.player.createPath(app);
+        assertEquals(0, app.paths.size());
+        app.player.y = 20;
+        app.player.updatePositionFlag(app);
+        app.player.createPath(app);
+        assertEquals(1, app.paths.size());
+        app.player.y = 40;
+        app.player.updatePositionFlag(app);
+        app.player.createPath(app);
+        assertEquals(2, app.paths.size());
+        app.player.x = 20;
+        app.player.updatePositionFlag(app);
+        app.player.createPath(app);
+        assertEquals(3, app.paths.size());
+        app.player.x = 0;
+        app.player.updatePositionFlag(app);
+        app.player.createPath(app);
+        assertEquals(0, app.paths.size());
+        assertEquals(4, app.grasses.size());
+
+        app.player.x = 40;
+        app.player.y = 60;
+        app.player.updatePositionFlag(app);
+        app.player.createPath(app);
+        app.player.y = 50;
+        app.player.updatePositionFlag(app);
+        app.player.createPath(app);
+        assertEquals(4, app.grasses.size());
+
+        app.player.y = 40;
+        app.player.updatePositionFlag(app);
+        app.player.createPath(app);
+        assertEquals(6, app.grasses.size());
+
+        app.grasses.clear();
+        app.enemies.get(0).x = 20;
+        app.enemies.get(0).y = 20;
+        app.paths.add(new Path(40, 40, null));
+        app.paths.add(new Path(60, 40, null));
+        app.paths.add(new Path(40, 60, null));
+        assertEquals(3, app.paths.size());
+        app.player.createPath(app);
+
+        assertEquals(0, app.paths.size());
+        app.player.x = 40;
+        app.player.y = 40;
+        assertEquals(4, app.grasses.size());
+        app.player.createPath(app);
+        assertEquals(4, app.grasses.size());
+    }
+
+    @Test
+    //move oririn, lose lives, respawn
+    public void testPlayer_1() {
+        App app = new App();
+        app.noLoop(); //optional
+        PApplet.runSketch(new String[] {"App"}, app);
+        app.setup();
+        app.delay(1000);
+
+        // check move orgin
+        app.cementTiles.clear();
+        app.enemies.clear();
+        app.collectedPowerup = new Powerup(app);
+        app.player.x = 0;
+        app.player.y = 0;
+        app.player.updatePositionFlag(app);
+        assertFalse(app.player.centerCement);
+        app.player.moveOrigin(app);
+        assertNull(app.collectedPowerup);
+        assertEquals(80, app.player.y);
+
+        // check respawn
+        assertEquals(3, app.player.lives);
+        app.player.y = 0;
+        app.player.playerRespawn(app);
+        assertEquals(2, app.player.lives);
+        app.player.lives = 1;
+        app.player.y = 0;
+        app.player.playerRespawn(app);
+        assertEquals(0, app.player.y);
+
+        // check lose life
+        app.player.x = 0;
+        app.player.y = 0;
+        app.player.lives = 3;
+        app.player.alive = true;
+        Bettle bettle = new Bettle(0, 0, null);
+        app.enemies.add(bettle);
+        assertEquals(1, app.enemies.size());
+        assertFalse(app.player.centerCement);
+        app.player.checkLoseOneLife(app);
+        assertEquals(2, app.player.lives);
+        app.currentRed.add(new Path(0, 80, null));
+        app.player.checkLoseOneLife(app);
+        assertEquals(1, app.player.lives);
+        assertEquals(0, app.paths.size());
+        app.paths.add(new Path(0, 20, null));
+        app.paths.add(new Path(0, 40, null));
+        app.player.y = 40;
+        assertEquals(1, app.player.lives);
+        app.player.checkLoseOneLife(app);
+        assertEquals(1, app.player.lives);
+        app.player.y = 20;
+        app.player.checkLoseOneLife(app);
+        assertEquals(0, app.player.lives);
     }
 
     @Test
