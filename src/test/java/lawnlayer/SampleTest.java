@@ -15,13 +15,89 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SampleTest {
     @Test
     //
-    public void testApp() {
+    public void testApp_2() {
         App app = new App();
         app.noLoop(); //optional
         PApplet.runSketch(new String[] {"App"}, app);
         app.setup();
         app.delay(1000);
 
+
+
+
+
+
+
+    }
+
+    @Test
+    // propagate event, power event
+    public void testApp_1() {
+        App app = new App();
+        app.noLoop(); //optional
+        PApplet.runSketch(new String[] {"App"}, app);
+        app.setup();
+        app.delay(1000);
+
+        // get red path
+        app.enemies.clear();
+        assertEquals(0, app.currentRed.size());
+        app.paths.add(new Path(0, 0, null));
+        app.paths.get(0).turnRed(app);
+        app.currentRed = app.getCurrentRed();
+        assertEquals(1, app.currentRed.size());
+
+        // propagate
+        assertEquals(3, app.propagationSpeed);
+        app.currentRed.clear();
+        assertEquals(1, app.paths.size());
+        assertEquals(0, app.propagateTimer);
+        app.propagateTimerIncrease();
+        //start propagate 3 frames
+        assertEquals(1, app.propagateTimer);
+        assertEquals(0, app.currentRed.size());
+        app.propagateTimerIncrease();
+        app.propagateTimerIncrease();
+        app.propagateTimerIncrease();
+        assertEquals(1, app.propagateTimer);
+        assertEquals(1, app.currentRed.size());
+        app.paths.get(0).isRed = false;
+        app.currentRed.clear();
+        app.propagateTimerIncrease();
+        app.propagateTimerIncrease();
+        app.propagateTimerIncrease();
+        assertEquals(1, app.propagateTimer);
+        assertEquals(0, app.currentRed.size());
+        app.paths.clear();
+        app.currentRed.clear();
+
+        // power event
+        app.powerupSpawnTimer = 0;
+        app.randomInterval = 0;
+        assertNull(app.unCollectedPowerup);
+        app.powerupEvent();
+        assertNotEquals(0, app.randomInterval);
+        assertEquals(1, app.powerupSpawnTimer);
+
+        app.powerupSpawnTimer = app.randomInterval - 1;
+        app.powerupEvent();
+        assertNotNull(app.unCollectedPowerup);
+        assertEquals(0, app.randomInterval);
+
+        app.powerupEvent();
+        assertNotEquals(0, app.randomInterval);
+
+        app.collectedPowerup = app.unCollectedPowerup;
+        app.draw();
+        app.unCollectedPowerup = null;
+        app.powerupDurationTimer = 0;
+        app.powerupEvent();
+        assertEquals(1, app.powerupDurationTimer);
+
+        assertNotNull(app.collectedPowerup);
+        app.powerupDurationTimer = 599;
+        app.powerupEvent();
+        assertNull(app.collectedPowerup);
     }
 
     @Test
@@ -148,8 +224,11 @@ public class SampleTest {
             app.cementTiles.add(new Cement(0, 20+ 20*i, null));
             app.cementTiles.add(new Cement(80, 20+ 20*i, null));
         }
+        for(Cement cement: app.cementTiles)
+            cement.sprite = app.concrete;
+
         assertEquals(16, app.cementTiles.size());
-        app.enemies.add(new Bettle(60, 60, null));
+        app.enemies.add(new Bettle(60, 60, app.beetle));
         assertEquals(1, app.enemies.size());
         assertEquals(0, app.grasses.size());
 
@@ -175,6 +254,7 @@ public class SampleTest {
         app.player.createPath(app);
         assertEquals(0, app.paths.size());
         assertEquals(4, app.grasses.size());
+        app.draw();
 
         app.player.x = 40;
         app.player.y = 60;
@@ -193,7 +273,7 @@ public class SampleTest {
         app.grasses.clear();
         app.enemies.get(0).x = 20;
         app.enemies.get(0).y = 20;
-        app.paths.add(new Path(40, 40, null));
+        app.paths.add(new Path(40, 40, app.green));
         app.paths.add(new Path(60, 40, null));
         app.paths.add(new Path(40, 60, null));
         assertEquals(3, app.paths.size());
@@ -205,6 +285,14 @@ public class SampleTest {
         assertEquals(4, app.grasses.size());
         app.player.createPath(app);
         assertEquals(4, app.grasses.size());
+
+        app.paths.clear();
+        app.paths.add(new Path(0, 0, app.red));
+        app.paths.get(0).isRed = true;
+        app.currentRed.add(app.paths.get(0));
+        app.player.centerCement = false;
+        app.player.centerGrass = false;
+        app.draw();
     }
 
     @Test

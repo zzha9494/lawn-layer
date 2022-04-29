@@ -407,15 +407,12 @@ public class App extends PApplet {
     public void winConditionCheck() {
         this.progress = Math.round(100 * (float)this.grasses.size() / (32*64 - this.cementTiles.size()));
 
-        if (this.player.lives == 0 && !this.gameOver) {
+        if (this.player.lives == 0 && !this.gameOver)
             this.gameOver = true;
-            System.out.println("over");
-        }
 
         if (this.progress >= this.goal && !this.gameWin) {
             if (this.currentLevel >= this.maxLevel) {
                 this.gameWin = true;
-                System.out.println("win");
                 return;
             }
             this.player.moveOrigin(this);
