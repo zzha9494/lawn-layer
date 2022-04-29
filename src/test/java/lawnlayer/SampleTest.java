@@ -578,6 +578,33 @@ public class SampleTest {
     }
 
     @Test
+    // collide
+    public void testElement() {
+        App app = new App();
+        Path p1 = new Path(0, 0, null);
+        Path p2 = new Path(10, 0, null);
+        Player p = new Player(0, 0, null);
+        Enemy e = new Enemy(100, 100, null);
+        app.paths = new ArrayList<Path>();
+        app.paths.add(p1);
+        app.paths.add(p2);
+        assertTrue(p1.checkCollide(p2));
+        assertTrue(p.checkInRegion(app.paths));
+        assertFalse(e.checkInRegion(app.paths));
+    }
+
+    @Test
+    // constructor, blank grid or not
+    public void testCharacter() {
+        Character c = new Player(100, 0, null);
+        assertEquals(100, c.x);
+        ArrayList<Tile> tiles = new ArrayList<Tile>();
+        tiles.add(new Tile(120, 0));
+        assertTrue(c.existsTile(120, 0, tiles));
+        assertFalse(c.existsTile(0, 0, tiles));
+    }
+
+    @Test
     // constructor
     public void testTile() {
         Tile t1 = new Tile(0, 0);
@@ -606,33 +633,6 @@ public class SampleTest {
     public void testBettle() {
         Bettle b = new Bettle(80, 0, null);
         assertEquals(80, b.x);
-    }
-
-    @Test
-    // constructor, blank grid or not
-    public void testCharacter() {
-        Character c = new Player(100, 0, null);
-        assertEquals(100, c.x);
-        ArrayList<Tile> tiles = new ArrayList<Tile>();
-        tiles.add(new Tile(120, 0));
-        assertTrue(c.existsTile(120, 0, tiles));
-        assertFalse(c.existsTile(0, 0, tiles));
-    }
-
-    @Test
-    // collide
-    public void testElement() {
-        App app = new App();
-        Path p1 = new Path(0, 0, null);
-        Path p2 = new Path(10, 0, null);
-        Player p = new Player(0, 0, null);
-        Enemy e = new Enemy(100, 100, null);
-        app.paths = new ArrayList<Path>();
-        app.paths.add(p1);
-        app.paths.add(p2);
-        assertTrue(p1.checkCollide(p2));
-        assertTrue(p.checkInRegion(app.paths));
-        assertFalse(e.checkInRegion(app.paths));
     }
 
 }
