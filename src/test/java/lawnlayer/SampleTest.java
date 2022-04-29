@@ -77,7 +77,6 @@ public class SampleTest {
             app.grasses.add(new Grass(0, 0, app.grass));
         app.winConditionCheck();
         assertEquals(2, app.currentLevel);
-        int b = (int)Math.round((32*64 - app.cementTiles.size()) * app.goal/100);
         for (int i = 0; i < a; i++)
             app.grasses.add(new Grass(0, 0, app.grass));
         assertFalse(app.gameWin);
@@ -352,7 +351,7 @@ public class SampleTest {
     }
 
     @Test
-    //move oririn, lose lives, respawn
+    //move origin, lose lives, respawn
     public void testPlayer_1() {
         App app = new App();
         app.noLoop(); //optional
@@ -360,7 +359,7 @@ public class SampleTest {
         app.setup();
         app.delay(1000);
 
-        // check move orgin
+        // check move origin
         app.cementTiles.clear();
         app.enemies.clear();
         app.collectedPowerup = new Powerup(app);
@@ -499,7 +498,6 @@ public class SampleTest {
         app.cementTiles.add(new Cement(20, 40, null));
         bettle.diagonal = Direction.BottomLeft;
         bettle.reflectDirection(app);
-        bettle.diagonal = Direction.TopLeft;
         bettle.diagonal = Direction.BottomRight;
         bettle.reflectDirection(app);
         bettle.diagonal = Direction.TopRight;
