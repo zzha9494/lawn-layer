@@ -17,7 +17,7 @@ public class Bettle extends Enemy{
      *
      * @param x the x coordinate of this bettle
      * @param y the y coordinate of this bettle
-     * @param sprite the image coordinate of this bettle
+     * @param sprite the image of this bettle
      */
     public Bettle(int x, int y, PImage sprite) {
         super(x, y, sprite);
