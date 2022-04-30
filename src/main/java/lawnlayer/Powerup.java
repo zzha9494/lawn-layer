@@ -48,9 +48,10 @@ public class Powerup extends Tile implements Spawn {
     }
 
     /**
+     * Automatically called when initialization. Assign image according to its type.
      *
      * @param app the running app
-     * @return
+     * @return the image of this powerup
      */
     public PImage chooseType(App app) {
         if (this.type == 0)
@@ -60,6 +61,20 @@ public class Powerup extends Tile implements Spawn {
             return app.powerup_1;
     }
 
+    /**
+     * Main event of handling the powerup.
+     * <p>
+     * Check if the player collected a powerup.
+     * If the player is having a powerup already,
+     * this will update the player's powerup to the new one.
+     * <p>
+     * Show it on the information board and reset timers.
+     * <p>
+     * If A power is enclosed by grasses, remove it.
+     * Show it on the information board and reset timers.
+     *
+     * @param app the running app
+     */
     public void checkCollected(App app) {
         if (this.checkCollide(app.player)) {
             if (app.collectedPowerup != null)
@@ -78,6 +93,11 @@ public class Powerup extends Tile implements Spawn {
         }
     }
 
+    /**
+     * Implement effects of a powerup.
+     *
+     * @param app the running app
+     */
     public void validPowerup(App app) {
         if (this.type == 0)
             for (Enemy enemy: app.enemies)
@@ -86,6 +106,11 @@ public class Powerup extends Tile implements Spawn {
             app.propagationSpeed = 6;
     }
 
+    /**
+     * Terminate effects of a powerup.
+     *
+     * @param app
+     */
     public void invalidPowerup(App app) {
         if (this.type == 0)
             for (Enemy enemy: app.enemies)
