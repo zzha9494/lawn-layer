@@ -215,6 +215,12 @@ public class App extends PApplet {
         }
     }
 
+    /**
+     * Read the config and create the map. Check the map is valid or not.
+     * Set the current goal here.
+     *
+     * @return all cement
+     */
     public ArrayList<Cement> createCement() {
         ArrayList<Cement> cementTiles = new ArrayList<Cement>();
 
@@ -233,6 +239,12 @@ public class App extends PApplet {
         return cementTiles;
     }
 
+    /**
+     * A helper method to read map.
+     *
+     * @param path the path of the map
+     * @return A matrix to express the map
+     */
     public boolean[][] readMap(String path) {
         File f = new File(path);
         Scanner scan;
@@ -256,6 +268,13 @@ public class App extends PApplet {
         return grid;
     }
 
+    /**
+     * Check the map validity.
+     *
+     * @param grid the matrix to express the map
+     * @return {@code true} if valid
+     * @throws Error throw error if not valid and terminate the program
+     */
     public boolean checkMapValid(boolean[][] grid) throws Error{
         if (grid == null)
             throw new Error("Invalid Map.");
@@ -272,6 +291,12 @@ public class App extends PApplet {
         return true;
     }
 
+    /**
+     * Create a new player.
+     * Read the lives here.
+     *
+     * @return player
+     */
     public Player createPlayer() {
         Player player = new Player(0, TOPBAR, this.ball);
         int lives = this.loadJSONObject(this.configPath).getInt("lives");
@@ -279,6 +304,12 @@ public class App extends PApplet {
         return player;
     }
 
+    /**
+     * Read the config and create enemies.
+     * Can randomly spawn or specifically.
+     *
+     * @return all enemies
+     */
     public ArrayList<Enemy> createEnemies() {
         ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
@@ -310,6 +341,10 @@ public class App extends PApplet {
         return enemies;
     }
 
+    /**
+     * Handle the propagation.
+     * Every 3 frame (by default) get the red paths and turn them red.
+     */
     public void propagateTimerIncrease() {
         if (this.propagateTimer >= this.propagationSpeed) {
             this.currentRed = this.getCurrentRed();
@@ -329,6 +364,24 @@ public class App extends PApplet {
             }
     }
 
+    /**
+     * Get all the red paths in this frame.
+     *
+     * @return red paths
+     */
+    public ArrayList<Path> getCurrentRed() {
+        ArrayList<Path> redPaths = new ArrayList<Path>();
+        for(Path path: this.paths)
+            if(path.isRed)
+                redPaths.add(path);
+        return redPaths;
+    }
+
+    /**
+     * Handle the powerup functionality.
+     * Get a random interval.
+     * valid and invalid accordingly.
+     */
     public void powerupEvent() {
         // 5-8s get interval
         if (this.randomInterval == 0)
@@ -357,14 +410,9 @@ public class App extends PApplet {
 
     }
 
-    public ArrayList<Path> getCurrentRed() {
-        ArrayList<Path> redPaths = new ArrayList<Path>();
-        for(Path path: this.paths)
-            if(path.isRed)
-                redPaths.add(path);
-        return redPaths;
-    }
-
+    /**
+     * Show the information above the board.
+     */
     public void showText() {
         String lives = "Lives: " + this.player.lives;
         String progress = (int)this.progress + "%/" + (int)(this.goal) + "%";
@@ -404,6 +452,9 @@ public class App extends PApplet {
         }
     }
 
+    /**
+     * Check the win or over condition.
+     */
     public void winConditionCheck() {
         this.progress = Math.round(100 * (float)this.grasses.size() / (32*64 - this.cementTiles.size()));
 
