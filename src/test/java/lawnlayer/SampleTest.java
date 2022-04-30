@@ -11,8 +11,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleTest {
 
+    /**
+     * Win condition of game over condition test.
+     * <p>
+     * Key pressed and released test.
+     * <p>
+     * Information text test.
+     */
     @Test
-    // win condition check
     public void testApp_2() {
         App app = new App();
         app.noLoop(); //optional
@@ -85,8 +91,12 @@ public class SampleTest {
         app.showText();
     }
 
+    /**
+     * Propagation event test.
+     * <p>
+     * Powerup functionality test.
+     */
     @Test
-    // propagate event, power event
     public void testApp_1() {
         App app = new App();
         app.noLoop(); //optional
@@ -155,8 +165,10 @@ public class SampleTest {
         assertNull(app.collectedPowerup);
     }
 
+    /**
+     * Player moving behavior test.
+     */
     @Test
-    // player moving
     public void testPlayer_3() {
         App app = new App();
         app.noLoop(); //optional
@@ -259,8 +271,12 @@ public class SampleTest {
         assertEquals(0, app.player.x);
     }
 
+    /**
+     * Paths creation test.
+     * <p>
+     * Grasses creation test within and without enemy.
+     */
     @Test
-    // create paths, create grasses with and without enemy.
     public void testPlayer_2() {
         App app = new App();
         app.noLoop(); //optional
@@ -350,8 +366,14 @@ public class SampleTest {
         app.draw();
     }
 
+    /**
+     * Move origin test.
+     * <p>
+     * Losing lives test.
+     * <p>
+     * respawn test.
+     */
     @Test
-    //move origin, lose lives, respawn
     public void testPlayer_1() {
         App app = new App();
         app.noLoop(); //optional
@@ -407,8 +429,12 @@ public class SampleTest {
         assertEquals(0, app.player.lives);
     }
 
+    /**
+     * Enemy reflection and turn back test.
+     * <p>
+     * Grass destruction test.
+     */
     @Test
-    // reflection, destroy grass, turn back
     public void testEnemy() {
         App app = new App();
         app.noLoop(); //optional
@@ -503,8 +529,14 @@ public class SampleTest {
         bettle.diagonal = Direction.TopRight;
     }
 
+    /**
+     * Powerup collection test.
+     * <p>
+     * Respawn test.
+     * <p>
+     * Valid and invalid test.
+     */
     @Test
-    // test collect powerup, spawn, valid and invalid
     public void testPowerup() {
         App app = new App();
         app.noLoop(); //optional
@@ -554,8 +586,12 @@ public class SampleTest {
         app.cementTiles.clear();
     }
 
+    /**
+     * Basic propagation test.
+     * <p>
+     * Getting cling test.
+     */
     @Test
-    // paths can be propagated red and get cling path
     public void testPath() {
         App app = new App();
         Path p = new Path(0, 0, null);
@@ -575,8 +611,10 @@ public class SampleTest {
         assertTrue(p2.isRed);
     }
 
+    /**
+     * Collision test.
+     */
     @Test
-    // collide
     public void testElement() {
         App app = new App();
         Path p1 = new Path(0, 0, null);
@@ -591,8 +629,10 @@ public class SampleTest {
         assertFalse(e.checkInRegion(app.paths));
     }
 
+    /**
+     * Empty tile test.
+     */
     @Test
-    // constructor, blank grid or not
     public void testCharacter() {
         Character c = new Player(100, 0, null);
         assertEquals(100, c.x);
