@@ -4,6 +4,14 @@ import processing.core.PImage;
 
 import java.util.ArrayList;
 
+/**
+ * This class is inherited from {@code Character} class.
+ * A player.
+ *
+ * @author Zijie Zhao
+ * @version 1.0
+ * @since 22/04/2022
+ */
 public class Player extends Character {
     public int speed;
     public int lives;
@@ -24,6 +32,13 @@ public class Player extends Character {
 
     public ArrayList<Tile> floodArea;
 
+    /**
+     * Class constructor.
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param sprite the image
+     */
     public Player(int x, int y, PImage sprite) {
         super(x, y, sprite);
         this.alive = true;
@@ -33,16 +48,30 @@ public class Player extends Character {
         this.floodArea = new ArrayList<Tile>();
     }
 
+    /**
+     * Set the lives of a player
+     *
+     * @param lives the lives
+     */
     public void setLives(int lives) {
         this.lives = lives;
     }
 
+    /**
+     * Update some flags related to the player's position.
+     *
+     * @param app the running app
+     */
     public void updatePositionFlag(App app) {
         this.hitCement = this.checkInRegion(app.cementTiles);
         this.centerCement = this.existsTile(this.x, this.y, app.cementTiles);
         this.centerGrass = this.existsTile(this.x, this.y, app.grasses);
     }
 
+    /**
+     * The behavior of moving on cement.
+     * The position is constrained by snap grid.
+     */
     public void normalMoving() {
         if(this.centerCement) {
             this.slideDirection = Direction.Stop;
@@ -83,6 +112,9 @@ public class Player extends Character {
         }
     }
 
+    /**
+     * The behavior of moving on soil or grass.
+     */
     public void soilMoving() {
         if(!this.hitCement) {
             this.leftRightDirection = Direction.Stop;
@@ -113,6 +145,9 @@ public class Player extends Character {
         }
     }
 
+    /**
+     * Turn direction when sliding.
+     */
     public void slideTurnDirection() {
         if (this.turnDirection == Direction.Left) {
             this.slideDirection = Direction.Left;
@@ -133,6 +168,12 @@ public class Player extends Character {
     }
 
 
+    /**
+     * Create paths when moving
+     * and automatically call {@code createGrass(app)} when reached a cement or grass.
+     *
+     * @param app the running app
+     */
     public void createPath(App app) {
         if ((this.centerCement || this.centerGrass) && app.paths.size() != 0) {
             this.createGrass(app);
@@ -149,6 +190,12 @@ public class Player extends Character {
         }
     }
 
+    /**
+     * Turn paths to grasses
+     * and automatically check an enclosed region.
+     *
+     * @param app the running app
+     */
     public void createGrass(App app) {
         for (Path path: app.paths) {
             Grass grass = new Grass(path.x, path.y, app.grass);
@@ -160,6 +207,12 @@ public class Player extends Character {
     }
 
 
+    /**
+     * Check the nearby tiles.
+     *
+     * @param app the running app
+     * @param p a path that is an origin of "flood"
+     */
     public void captureTerritory(App app, Path p) {
         boolean encloseSuccess = false;
         if(isPlainSoil(app, p.x-20, p.y)) {
@@ -184,6 +237,12 @@ public class Player extends Character {
         }
     }
 
+    /**
+     * A helped method that implement the flood fill algorithm.
+     *
+     * @param app the running app
+     * @param t the latest "flood", or the current node being visited.
+     */
     public void floodFill(App app, Tile t) {
         if(isPlainSoil(app, t.x-20, t.y)) {
             Tile temp = new Tile(t.x-20, t.y);
@@ -207,6 +266,14 @@ public class Player extends Character {
         }
     }
 
+    /**
+     * Check a tile is empty or not.
+     *
+     * @param app the running app
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return {@code true} if the position is empty
+     */
     public boolean isPlainSoil(App app, int x, int y) {
         if(this.existsTile(x, y, app.cementTiles))
             return false;
@@ -217,6 +284,12 @@ public class Player extends Character {
         return true;
     }
 
+    /**
+     * Enclosed a region if there is no enemy within it.
+     *
+     * @param app the running app
+     * @return {@code true} if a region is enclosed without an enemy
+     */
     public boolean encloseRegion(App app) {
         for (Enemy enemy: app.enemies) {
             if (enemy.checkInRegion(this.floodArea)) {
@@ -231,6 +304,11 @@ public class Player extends Character {
     }
 
 
+    /**
+     * Handle the event if the player lose a life.
+     *
+     * @param app the running app
+     */
     public void checkLoseOneLife(App app) {
         if(this.checkInRegion(app.enemies) && !this.centerCement)
             this.alive = false;
@@ -247,6 +325,11 @@ public class Player extends Character {
             this.playerRespawn(app);
     }
 
+    /**
+     * Respawn the player if not the last blood.
+     *
+     * @param app the running app
+     */
     public void playerRespawn(App app) {
         this.lives --;
         if (this.lives == 0)
@@ -261,6 +344,11 @@ public class Player extends Character {
         this.moveOrigin(app);
     }
 
+    /**
+     * Move the player to its origin and clear all.
+     *
+     * @param app the running app
+     */
     public void moveOrigin(App app) {
         this.x = 0;
         this.y = 80;
@@ -282,6 +370,9 @@ public class Player extends Character {
     }
 
 
+    /**
+     * Update the position per frame.
+     */
     public void tick() {
         if(this.hitCement)
             this.normalMoving();

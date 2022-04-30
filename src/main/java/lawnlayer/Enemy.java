@@ -20,6 +20,8 @@ public class Enemy extends Character implements Spawn {
     public Direction diagonal;
 
     /**
+     * Class constructor.
+     *
      * @param x the x coordinate
      * @param y the y coordinate
      * @param sprite the image
