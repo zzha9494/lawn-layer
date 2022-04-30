@@ -5,6 +5,10 @@ import processing.core.PImage;
 
 import java.util.ArrayList;
 
+/**
+ * This is the direction used by player instance and enemy instance
+ * to indicate their direction of next frame.
+ */
 enum Direction {
     Stop,
     Up,
@@ -17,15 +21,32 @@ enum Direction {
     BottomRight
 }
 
+/**
+ * Implement the way of spawn. Only {@code randomSpawn} offered currently.
+ */
 interface Spawn {
     void randomSpawn(App app);
 }
 
+/**
+ * This is the class that other classes inherited form.
+ *
+ * @author Zijie Zhao
+ * @version 1.0
+ * @since 22/04/2022
+ */
 public class Element {
     protected int x;
     protected int y;
     protected PImage sprite;
 
+    /**
+     * Class constructor.
+     *
+     * @param x the x coordinate of this element.
+     * @param y the y coordinate of this element.
+     * @param sprite the image of this element.
+     */
     public Element(int x, int y, PImage sprite) {
         this.x = x;
         this.y = y;
