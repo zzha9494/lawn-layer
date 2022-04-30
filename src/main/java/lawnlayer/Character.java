@@ -16,9 +16,9 @@ public abstract class Character extends Element{
     /**
      * Class constructor.
      *
-     * @param x the x coordinate of a character
-     * @param y the y coordinate of a character
-     * @param sprite the image of a character
+     * @param x the x coordinate of the character
+     * @param y the y coordinate of the character
+     * @param sprite the image of the character
      */
     public Character(int x, int y, PImage sprite) {
         super(x, y, sprite);
