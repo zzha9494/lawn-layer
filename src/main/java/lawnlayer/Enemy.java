@@ -4,12 +4,26 @@ import processing.core.PImage;
 
 import java.util.ArrayList;
 
+/**
+ * This class is inherited from {@code Character} class.
+ * <p>
+ * A general enemy.
+ *
+ * @author Zijie Zhao
+ * @version 1.0
+ * @since 22/04/2022
+ */
 public class Enemy extends Character implements Spawn {
     public int speed;
     public int type;
     public boolean isFrozen;
     public Direction diagonal;
 
+    /**
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param sprite the image
+     */
     public Enemy(int x, int y, PImage sprite) {
         super(x, y, sprite);
         this.diagonal = this.initialDiagonal();
@@ -17,6 +31,11 @@ public class Enemy extends Character implements Spawn {
         type = 0;
     }
 
+    /**
+     * Get a random direction when an enemy is initialized.
+     *
+     * @return The direction
+     */
     public Direction initialDiagonal() {
         int i = (int)(Math.random()*4);
 
@@ -29,6 +48,12 @@ public class Enemy extends Character implements Spawn {
         return Direction.BottomRight;
     }
 
+    /**
+     * Randomly set position and check if this position is empty.
+     * The boundary of the map has been excepted.
+     *
+     * @param app the running app
+     */
     public void randomSpawn(App app) {
         while(true) {
             int x = (int)(Math.random()*62);
@@ -42,6 +67,13 @@ public class Enemy extends Character implements Spawn {
         }
     }
 
+    /**
+     * Handle the reflection of an enemy when hitting another tile.
+     * <p>
+     * When hit a right angle, it will turn back.
+     *
+     * @param app the running app
+     */
     public void reflectDirection(App app) {
         ArrayList<Tile> clingTiles = this.getClingTiles(app);
         if (clingTiles.size() == 0 && (this.checkInRegion(app.grasses) || this.checkInRegion(app.cementTiles) || this.checkInRegion(app.paths))) {
@@ -77,6 +109,9 @@ public class Enemy extends Character implements Spawn {
             this.turnBack();
     }
 
+    /**
+     * Turn an enemy back.
+     */
     public void turnBack() {
         if (this.diagonal == Direction.TopRight)
             this.diagonal = Direction.BottomLeft;
@@ -88,6 +123,13 @@ public class Enemy extends Character implements Spawn {
             this.diagonal = Direction.TopLeft;
     }
 
+    /**
+     * Get the cling tiles of an enemy and return all tiles it is clinging to.
+     * Check paths, grasses, cement.
+     *
+     * @param app the running app
+     * @return all tiles clinging to
+     */
     public ArrayList<Tile> getClingTiles(App app) {
         ArrayList<Tile> clingTiles = new ArrayList<Tile>();
         for (Cement cement: app.cementTiles) {
@@ -109,6 +151,11 @@ public class Enemy extends Character implements Spawn {
         return clingTiles;
     }
 
+    /**
+     * Destroy a grass only once per frame.
+     *
+     * @param app the running app
+     */
     public void destroyGrass(App app) {
         // throw ConcurrentModificationException using for-each
 //        app.grasses.removeIf(grass -> this.checkCling(grass) || this.checkCollide(grass));
@@ -120,6 +167,9 @@ public class Enemy extends Character implements Spawn {
             }
     }
 
+    /**
+     * Update the position per frame.
+     */
     public void tick() {
         if (this.diagonal == Direction.TopLeft) {
             this.x -= this.speed;

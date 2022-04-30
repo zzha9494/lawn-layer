@@ -4,7 +4,7 @@ import processing.core.PImage;
 
 /**
  * This class is inherited from {@code enemy} class.
- * Any bettle whose type is set to 1.
+ * A bettle whose type is set to 1.
  *
  * @author Zijie Zhao
  * @version 1.0

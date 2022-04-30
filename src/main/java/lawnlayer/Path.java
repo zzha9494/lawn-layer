@@ -39,7 +39,7 @@ public class Path extends Tile{
     }
 
     /**
-     * Propagation starts from all current red paths.
+     * Starts propagation from all current red paths.
      *
      * @param app the running app
      */
